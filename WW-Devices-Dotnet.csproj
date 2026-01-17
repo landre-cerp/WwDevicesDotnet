@@ -17,6 +17,7 @@
         <PackageTags>winwing; mcdu; fcu; cdu; frontpanel; .net; csharp; aviation; flight-simulator</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <Version>1.0.0</Version>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
