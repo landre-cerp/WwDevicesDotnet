@@ -232,10 +232,6 @@ namespace WwDevicesDotNet.WinWing.FcuAndEfis
                 payload[0x28] |= 0x10;  // ALT managed indicator at v[1] position
             }
             
-            if(state.VsHorzIndicator) {
-                payload[0x25] |= 0x20;  // Horizontal indicator (different bit to avoid minus)
-            }
-            
             if(state.LvlIndicator) {
                 payload[0x23] |= 0x10;  // Level change indicator
             }
