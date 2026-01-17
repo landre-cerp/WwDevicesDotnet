@@ -39,6 +39,9 @@ namespace WwDevicesDotNet.WinWing.FcuAndEfis
             0xFC  // 9
         };
 
+        /// <inheritdoc/>
+        public override IFrontpanelCapabilities Capabilities { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FcuEfisDevice"/> class.
         /// </summary>
@@ -47,6 +50,7 @@ namespace WwDevicesDotNet.WinWing.FcuAndEfis
         public FcuEfisDevice(HidDevice hidDevice, DeviceIdentifier deviceId)
             : base(hidDevice, deviceId)
         {
+            Capabilities = new FcuEfisCapabilities(HasLeftEfis(), HasRightEfis());
         }
 
         /// <inheritdoc/>

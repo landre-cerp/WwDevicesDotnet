@@ -29,6 +29,11 @@ namespace WwDevicesDotNet
         bool IsConnected { get; }
 
         /// <summary>
+        /// Gets the capabilities of this frontpanel device.
+        /// </summary>
+        IFrontpanelCapabilities Capabilities { get; }
+
+        /// <summary>
         /// Raised when a button or control is pressed/activated.
         /// </summary>
         event EventHandler<FrontpanelEventArgs> ControlActivated;

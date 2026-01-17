@@ -65,6 +65,61 @@ Front panel devices expose `ControlActivated` and `ControlDeactivated` events fo
 and control changes, and provide an `UpdateDisplay` method to update the device's display(s).
 
 
+### Checking Device Capabilities
+
+Each front panel device exposes a `Capabilities` property that describes its high-level features.
+This allows you to write adaptive code that works with different device models:
+
+```csharp
+using(var frontpanel = FrontpanelFactory.ConnectLocal())
+{
+    var caps = frontpanel.Capabilities;
+    
+    // Check if device supports barometric pressure display
+    if(caps.CanDisplayBarometricPressure)
+    {
+        // Update QNH/QFE displays on EFIS panels
+        var state = new FcuEfisState();
+        state.LeftBaroPressure = 1013;
+        state.LeftBaroQnh = true;
+        frontpanel.UpdateDisplay(state);
+    }
+    
+    // Check if device has pilot/copilot course displays (PAP-3 specific)
+    if(caps.HasPilotCourseDisplay)
+    {
+        var state = new Pap3State();
+        state.PltCourse = "045";
+        state.CplCourse = "180";
+        frontpanel.UpdateDisplay(state);
+    }
+    
+    // Check if device supports flight level mode
+    if(caps.HasFlightLevelMode)
+    {
+        // Can display "FL350" format (FCU and PAP-3)
+        var state = new Pap3State();
+        state.Altitude = 35000;
+        state.AltitudeIsFlightLevel = true; // Will display as "FL350"
+        frontpanel.UpdateDisplay(state);
+    }
+}
+```
+
+Available capability properties:
+- `HasSpeedDisplay` - Device has speed/IAS display
+- `HasHeadingDisplay` - Device has heading display
+- `HasAltitudeDisplay` - Device has altitude display
+- `HasVerticalSpeedDisplay` - Device has vertical speed display
+- `CanDisplayBarometricPressure` - Device can display barometric pressure (EFIS panels)
+- `CanDisplayQnhQfe` - Device can display QNH/QFE indicators (EFIS panels)
+- `HasPilotCourseDisplay` - Device has pilot course display (PAP-3)
+- `HasCopilotCourseDisplay` - Device has copilot course display (PAP-3)
+- `SupportsAlphanumericDisplay` - Device can display letters, not just numbers
+- `HasFlightLevelMode` - Device supports flight level display mode
+- `HasMachSpeedMode` - Device supports Mach speed display mode
+
+
 
 ## Reading from the CDU
 
