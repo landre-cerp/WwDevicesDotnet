@@ -15,7 +15,7 @@
         <RepositoryUrl>https://github.com/landre-cerp/WwDevicesDotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>winwing; mcdu; fcu; cdu; frontpanel; .net; csharp; aviation; flight-simulator</PackageTags>
-        <PackageLicenseFile>LICENCE</PackageLicenseFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <Version>1.0.0</Version>
     </PropertyGroup>
 
