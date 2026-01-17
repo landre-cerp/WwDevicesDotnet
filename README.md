@@ -1,11 +1,33 @@
-﻿# MCDU-DOTNET
+﻿# WW-Devices-Dotnet
 
 The NuGet package for the library can be found here:
 
 https://www.nuget.org/packages/mcdu-dotnet/
 
 
+## Supported Devices
+
+This library supports the following WinWing devices:
+
+### CDU Devices
+
+- **WinWing MCDU** (Airbus A320) - Captain, First Officer, and Observer positions
+- **WinWing PFP-3N** (Boeing 737 NG) - Captain, First Officer, and Observer positions
+- **WinWing PFP-7** (Boeing 777) - Captain, First Officer, and Observer positions
+- **WinWing PFP-4** (Boeing 747) - Captain, First Officer, and Observer positions
+
+### Front Panel Devices
+
+- **WinWing FCU** (Airbus A320 Flight Control Unit) - Standalone or with EFIS panels (left, right, or both)
+- **WinWing PAP-3** (Boeing 737 Primary Autopilot Panel)
+- **WinWing PDC-3N** (Left and Right configurations)
+
+Each device can be connected via USB and is automatically detected by the library. Use `CduFactory.FindLocalDevices()` to enumerate connected CDU devices or `FrontpanelFactory.FindLocalDevices()` to enumerate connected front panel devices.
+
+
 ## PRELIMINARY DOCUMENTATION
+
+### Working with CDU Devices
 
 To instantiate a CDU object call the `CduFactory` static:
 
@@ -19,7 +41,26 @@ also a function that enumerates the CDU USB devices that are currently active.
 The `ConnectLocal` function returns an instance of an `ICdu` interface. The latest
 version of the interface is here:
 
-https://github.com/vradarserver/cduhub/blob/main/library/mcdu-dotnet/ICdu.cs
+https://github.com/landre-cerp/WwDevicesDotnet/blob/main/ICdu.cs
+
+
+### Working with Front Panel Devices
+
+To instantiate a front panel device (FCU, PAP-3, PDC-3N, etc.) call the `FrontpanelFactory` static:
+
+```
+using(var frontpanel = FrontpanelFactory.ConnectLocal())
+```
+
+Similar to CDU devices, you can specify which device to connect to or enumerate available devices.
+
+The `ConnectLocal` function returns an instance of an `IFrontpanel` interface. The latest
+version of the interface is here:
+
+https://github.com/landre-cerp/WwDevicesDotnet/blob/main/IFrontpanel.cs
+
+Front panel devices expose `ControlActivated` and `ControlDeactivated` events for button presses
+and control changes, and provide an `UpdateDisplay` method to update the device's display(s).
 
 
 
@@ -110,11 +151,11 @@ pixels wide.
 
 Fonts are described by an `McduFontFile` object:
 
-https://github.com/vradarserver/cduhub/blob/main/library/mcdu-dotnet/McduFontFile.cs
+https://github.com/landre-cerp/WwDevicesDotnet/blob/main/McduFontFile.cs
 
-Examples of font files can be found in the `cduhub` library's resources folder:
+Examples of font files can be found in the resources folder:
 
-https://github.com/vradarserver/cduhub/tree/main/library/cduhub/Resources
+https://github.com/landre-cerp/WwDevicesDotnet/tree/main/Resources
 
 
 
