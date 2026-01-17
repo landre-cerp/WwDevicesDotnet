@@ -1,0 +1,13 @@
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\bin\Debug\netstandard2.0\McduDotNet.deps.json
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\bin\Debug\netstandard2.0\McduDotNet.dll
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\bin\Debug\netstandard2.0\McduDotNet.pdb
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\ww-devices-dotnet.csproj.AssemblyReference.cache
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\McduDotNet.CduResources.resources
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\ww-devices-dotnet.csproj.GenerateResource.cache
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\ww-devices-dotnet.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\ww-devices-dotnet.AssemblyInfoInputs.cache
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\ww-devices-dotnet.AssemblyInfo.cs
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\ww-devices-dotnet.csproj.CoreCompileInputs.cache
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\ww-devices-dotnet.sourcelink.json
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\McduDotNet.dll
+C:\Users\Laurent\Projects\WWCduDcsBiosBridge\libs\WWDevicesDotnet\obj\Debug\netstandard2.0\McduDotNet.pdb
