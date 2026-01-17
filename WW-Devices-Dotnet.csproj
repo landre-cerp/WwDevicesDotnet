@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>WwDevicesDotnet</AssemblyName>
-        <RootNamespace>WwDevicesDotnet</RootNamespace>
+        <RootNamespace>WwDevicesDotNet</RootNamespace>
         <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
         <PackageId>ww-devices-dotnet</PackageId>
         <Title>WW-Devices-Dotnet</Title>
