@@ -54,7 +54,15 @@ jobs:
       shell: pwsh
       run: |
         $pkg = Get-ChildItem ./artifacts -Filter *.nupkg | Select-Object -First 1
-        if (-not $pkg) { throw "No .nupkg produced in ./artifacts" }
+        if (-not $pkg) {
+          $artifactFiles = Get-ChildItem ./artifacts -Recurse -Force | Select-Object -ExpandProperty FullName
+          if (-not $artifactFiles) {
+            $filesDescription = "<no files found in ./artifacts>"
+          } else {
+            $filesDescription = $artifactFiles -join [Environment]::NewLine
+          }
+          throw "No .nupkg produced in ./artifacts. Files found:`n$filesDescription"
+        }
         dotnet nuget push $pkg.FullName --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
 
     - name: Upload artifacts
