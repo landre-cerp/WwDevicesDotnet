@@ -1,8 +1,10 @@
 ﻿# WW-Devices-Dotnet
 
-The NuGet package for the library can be found here:
+The NuGet package for the library will be available at:
 
-https://www.nuget.org/packages/mcdu-dotnet/
+https://www.nuget.org/packages/ww-devices-dotnet/
+
+*(Package will be published upon first release)*
 
 
 ## Supported Devices
