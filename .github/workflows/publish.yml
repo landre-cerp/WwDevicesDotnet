@@ -13,40 +13,58 @@ on:
 jobs:
   publish:
     runs-on: windows-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '6.0.x'
-    
+
     - name: Set version from release tag
       if: github.event_name == 'release'
       shell: pwsh
       run: |
         $version = "${{ github.event.release.tag_name }}" -replace '^v', ''
         echo "PACKAGE_VERSION=$version" >> $env:GITHUB_ENV
-    
+
     - name: Set version from manual input
       if: github.event_name == 'workflow_dispatch'
       shell: pwsh
       run: |
         echo "PACKAGE_VERSION=${{ github.event.inputs.version }}" >> $env:GITHUB_ENV
-    
+
     - name: Restore dependencies
-      run: dotnet restore
-    
+      run: dotnet restore WW-Devices-Dotnet.csproj
+
     - name: Build
-      run: dotnet build --configuration Release --no-restore /p:Version=${{ env.PACKAGE_VERSION }}
-    
+      run: dotnet build WW-Devices-Dotnet.csproj --configuration Release --no-restore /p:Version=${{ env.PACKAGE_VERSION }}
+
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ env.PACKAGE_VERSION }}
-    
+      run: dotnet pack WW-Devices-Dotnet.csproj --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ env.PACKAGE_VERSION }}
+
+    - name: List artifacts (debug)
+      shell: pwsh
+      run: |
+        Write-Host "Artifacts contents:"
+        Get-ChildItem -Path ./artifacts -Recurse -Force | Format-Table FullName, Length
+
     - name: Push to NuGet.org
-      run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-    
+      shell: pwsh
+      run: |
+        $pkg = Get-ChildItem ./artifacts -Filter *.nupkg | Select-Object -First 1
+        if (-not $pkg) {
+          $artifactFiles = Get-ChildItem ./artifacts -Recurse -Force | Select-Object -ExpandProperty FullName
+          if (-not $artifactFiles) {
+            $filesDescription = "<no files found in ./artifacts>"
+          } else {
+            $filesDescription = $artifactFiles -join [Environment]::NewLine
+          }
+          throw "No .nupkg produced in ./artifacts. Files found:`n$filesDescription"
+        }
+        dotnet nuget push $pkg.FullName --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
