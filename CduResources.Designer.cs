@@ -39,7 +39,7 @@ namespace WwDevicesDotNet {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("McduDotNet.CduResources", typeof(CduResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WwDevicesDotNet.CduResources", typeof(CduResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

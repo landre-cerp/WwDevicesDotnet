@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <AssemblyName>McduDotNet</AssemblyName>
-        <RootNamespace>McduDotNet</RootNamespace>
+        <AssemblyName>WwDevicesDotNet</AssemblyName>
+        <RootNamespace>WwDevicesDotNet</RootNamespace>
         <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
         <PackageId>ww-devices-dotnet</PackageId>
         <Title>WW-Devices-Dotnet</Title>
