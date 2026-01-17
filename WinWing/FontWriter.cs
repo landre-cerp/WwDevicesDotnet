@@ -12,7 +12,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using WwDevicesDotnet;
+using WwDevicesDotNet;
 
 namespace WwDevicesDotNet.WinWing
 {
