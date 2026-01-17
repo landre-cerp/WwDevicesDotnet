@@ -38,6 +38,9 @@ namespace WwDevicesDotNet.WinWing
         public bool IsConnected => _HidStream != null;
 
         /// <inheritdoc/>
+        public abstract IFrontpanelCapabilities Capabilities { get; }
+
+        /// <inheritdoc/>
         public event EventHandler<FrontpanelEventArgs> ControlActivated;
 
         /// <inheritdoc/>

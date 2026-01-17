@@ -197,6 +197,9 @@ namespace WwDevicesDotNet.WinWing.Pap3
         ushort _SequenceNumber = 0;
         bool _LastMagneticState = false;
 
+        /// <inheritdoc/>
+        public override IFrontpanelCapabilities Capabilities { get; } = new Pap3Capabilities();
+
         /// <summary>
         /// Gets the native value from the device's left ambient light sensor.
         /// </summary>
@@ -548,7 +551,18 @@ namespace WwDevicesDotNet.WinWing.Pap3
 
             // Encode Altitude display (5 characters)
             if (!string.IsNullOrEmpty(state.AltitudeDisplay)) {
-                EncodeStringWithMapping(buffer, state.AltitudeDisplay, _AltitudeMapping, 5);
+                string displayValue;
+                
+                if (state.AltitudeIsFlightLevel && state.Altitude.HasValue) {
+                    // Flight Level mode: display "FL" + flight level (e.g., altitude 10000 → FL100)
+                    var flightLevel = state.Altitude.Value / 100;
+                    displayValue = $"FL{flightLevel:D3}";
+                } else {
+                    // Standard altitude mode: use the display string as-is
+                    displayValue = state.AltitudeDisplay;
+                }
+                
+                EncodeStringWithMapping(buffer, displayValue, _AltitudeMapping, 5);
             }
 
             // Encode Vertical Speed display (4 characters)

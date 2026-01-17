@@ -49,6 +49,9 @@ namespace WwDevicesDotNet.WinWing.Pdc3nm
         /// </summary>
         public event EventHandler AmbientLightChanged;
 
+        /// <inheritdoc/>
+        public override IFrontpanelCapabilities Capabilities { get; } = new Pdc3Capabilities();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Pdc3Device"/> class.
         /// </summary>
