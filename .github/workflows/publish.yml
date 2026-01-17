@@ -36,7 +36,7 @@ jobs:
         echo "PACKAGE_VERSION=${{ github.event.inputs.version }}" >> $env:GITHUB_ENV
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore WW-Devices-Dotnet.csproj
 
     - name: Build
       run: dotnet build WW-Devices-Dotnet.csproj --configuration Release --no-restore /p:Version=${{ env.PACKAGE_VERSION }}
