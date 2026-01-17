@@ -18,6 +18,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Include=".github\workflows\build.yml" />
+      <None Include=".github\workflows\publish.yml" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="HidSharp" Version="2.6.4" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
@@ -39,6 +44,10 @@
 
     <ItemGroup>
       <None Update="README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+      <None Update="LICENCE">
         <Pack>True</Pack>
         <PackagePath>\</PackagePath>
       </None>
