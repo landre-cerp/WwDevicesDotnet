@@ -6,7 +6,7 @@ https://www.nuget.org/packages/ww-devices-dotnet/
 
 *(Package will be published upon first release)*
 
-Note : in 2026, Winwing will be rebranding Winctrl.
+Note: In 2026, WinWing will be rebranding to Winctrl.
 
 ## Supported Devices
 
