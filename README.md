@@ -6,23 +6,24 @@ https://www.nuget.org/packages/ww-devices-dotnet/
 
 *(Package will be published upon first release)*
 
+Note: In 2026, WinWing will be rebranding to Winctrl.
 
 ## Supported Devices
 
-This library supports the following WinWing devices:
+This library supports the following Winctrl devices:
 
 ### CDU Devices
 
-- **WinWing MCDU** (Airbus A320) - Captain, First Officer, and Observer positions
-- **WinWing PFP-3N** (Boeing 737 NG) - Captain, First Officer, and Observer positions
-- **WinWing PFP-7** (Boeing 777) - Captain, First Officer, and Observer positions
-- **WinWing PFP-4** (Boeing 747) - Captain, First Officer, and Observer positions
+- **Winctrl MCDU** (Airbus A320) - Captain, First Officer, and Observer positions
+- **Winctrl PFP-3N** (Boeing 737 NG) - Captain, First Officer, and Observer positions
+- **Winctrl PFP-7** (Boeing 777) - Captain, First Officer, and Observer positions
+- **Winctrl PFP-4** (Boeing 747) - Captain, First Officer, and Observer positions
 
 ### Front Panel Devices
 
-- **WinWing FCU** (Airbus A320 Flight Control Unit) - Standalone or with EFIS panels (left, right, or both)
-- **WinWing PAP-3** (Boeing 737 Primary Autopilot Panel)
-- **WinWing PDC-3N** (Left and Right configurations)
+- **Winctrl FCU** (Airbus A320 Flight Control Unit) - Standalone or with EFIS panels (left, right, or both)
+- **Winctrl PAP-3** (Boeing 737 Primary Autopilot Panel)
+- **Winctrl PDC-3N** (Left and Right configurations)
 
 Each device can be connected via USB and is automatically detected by the library. Use `CduFactory.FindLocalDevices()` to enumerate connected CDU devices or `FrontpanelFactory.FindLocalDevices()` to enumerate connected front panel devices.
 
@@ -185,7 +186,7 @@ you can call `RefreshBrightnesses`.
 ### Colours
 
 The display supports a palette of ten colours. The names and default values of the
-colours follow WinWing's defaults, but you are free to reassign the colours to anything
+colours follow Winctrl's defaults, but you are free to reassign the colours to anything
 you like via the `Palette` property. After changing the palette you need to call
 `RefreshPalette` to send your changes to the device.
 

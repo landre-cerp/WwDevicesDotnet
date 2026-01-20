@@ -51,7 +51,7 @@ namespace WwDevicesDotNet
 
         public PaletteColour Khaki { get; } = PaletteColour.Parse(DefaultKhakiRgb);
 
-        public PaletteColour[] ToWinWingOrdinalColours()
+        public PaletteColour[] ToWinctrlOrdinalColours()
         {
             return new PaletteColour[] {
                 Black,

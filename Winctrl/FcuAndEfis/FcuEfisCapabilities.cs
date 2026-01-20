@@ -1,4 +1,4 @@
-﻿// Copyright © 2025 onwards, Andrew Whewell
+// Copyright � 2025 onwards, Laurent Andre
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -8,59 +8,53 @@
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OF THE SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WwDevicesDotNet
+namespace WwDevicesDotNet.Winctrl.FcuAndEfis
 {
     /// <summary>
-    /// An enumeration of all of the USB devices that the library can interact with.
+    /// Describes the capabilities of a Winctrl FCU (with optional EFIS) device.
     /// </summary>
-    public enum Device
+    public class FcuEfisCapabilities : IFrontpanelCapabilities
     {
-        /// <summary>
-        /// A Winctrl Airbus MCDU.
-        /// </summary>
-        WinctrlMcdu,
+        private readonly bool _hasLeftEfis;
+        private readonly bool _hasRightEfis;
 
-        /// <summary>
-        /// A Winctrl Boeing 777 PFP-7.
-        /// </summary>
-        WinctrlPfp7,
+        public FcuEfisCapabilities(bool hasLeftEfis, bool hasRightEfis)
+        {
+            _hasLeftEfis = hasLeftEfis;
+            _hasRightEfis = hasRightEfis;
+        }
 
-        /// <summary>
-        /// A Winctrl Boeing 737 PFP-3N. I do not have one of these so it might not work!
-        /// </summary>
-        WinctrlPfp3N,
+        /// <inheritdoc/>
+        public bool HasSpeedDisplay => true;
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel (standalone, no EFIS attached).
-        /// </summary>
-        WinctrlFcu,
+        /// <inheritdoc/>
+        public bool HasHeadingDisplay => true;
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with left EFIS attached.
-        /// </summary>
-        WinctrlFcuLeftEfis,
+        /// <inheritdoc/>
+        public bool HasAltitudeDisplay => true;
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with right EFIS attached.
-        /// </summary>
-        WinctrlFcuRightEfis,
+        /// <inheritdoc/>
+        public bool HasVerticalSpeedDisplay => true;
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with both left and right EFIS attached.
-        /// </summary>
-        WinctrlFcuBothEfis,
+        /// <inheritdoc/>
+        public bool CanDisplayBarometricPressure => _hasLeftEfis || _hasRightEfis;
 
-        /// <summary>
-        /// A Winctrl PAP-3 Primary Autopilot Panel.
-        /// </summary>
-        WinctrlPap3,
+        /// <inheritdoc/>
+        public bool CanDisplayQnhQfe => _hasLeftEfis || _hasRightEfis;
 
-        /// <summary>
-        /// A Winctrl PFP-4.
-        /// </summary>
-        WinctrlPfp4,
+        /// <inheritdoc/>
+        public bool HasPilotCourseDisplay => false;
 
+        /// <inheritdoc/>
+        public bool HasCopilotCourseDisplay => false;
 
-        WinctrlPdc3n,
+        /// <inheritdoc/>
+        public bool SupportsAlphanumericDisplay => true;
+
+        /// <inheritdoc/>
+        public bool HasFlightLevelMode => true;
+
+        /// <inheritdoc/>
+        public bool HasMachSpeedMode => true;
     }
 }

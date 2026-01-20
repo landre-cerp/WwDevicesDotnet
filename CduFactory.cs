@@ -11,10 +11,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using HidSharp;
-using WwDevicesDotNet.WinWing.Mcdu;
-using WwDevicesDotNet.WinWing.Pfp3N;
-using WwDevicesDotNet.WinWing.Pfp7;
-using WwDevicesDotNet.WinWing.Pfp4;
+using WwDevicesDotNet.Winctrl.Mcdu;
+using WwDevicesDotNet.Winctrl.Pfp3N;
+using WwDevicesDotNet.Winctrl.Pfp7;
+using WwDevicesDotNet.Winctrl.Pfp4;
 
 namespace WwDevicesDotNet
 {
@@ -124,22 +124,22 @@ namespace WwDevicesDotNet
                     .FirstOrDefault();
                 if(hidDevice != null) {
                     switch(deviceId.Device) {
-                        case Device.WinWingMcdu:
+                        case Device.WinctrlMcdu:
                             var mcdu = new McduDevice(hidDevice, deviceId);
                             mcdu.Initialise();
                             result = mcdu;
                             break;
-                        case Device.WinWingPfp3N:
+                        case Device.WinctrlPfp3N:
                             var pfp3N = new Pfp3NDevice(hidDevice, deviceId);
                             pfp3N.Initialise();
                             result = pfp3N;
                             break;
-                        case Device.WinWingPfp7:
+                        case Device.WinctrlPfp7:
                             var pfp7 = new Pfp7Device(hidDevice, deviceId);
                             pfp7.Initialise();
                             result = pfp7;
                             break;
-                        case Device.WinWingPfp4:
+                        case Device.WinctrlPfp4:
                             var pfp4 = new Pfp4Device(hidDevice, deviceId);
                             pfp4.Initialise();
                             result = pfp4;

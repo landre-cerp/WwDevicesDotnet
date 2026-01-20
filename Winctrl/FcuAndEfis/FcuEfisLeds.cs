@@ -1,4 +1,4 @@
-﻿// Copyright © 2025 onwards, Andrew Whewell
+﻿// Copyright © 2025 onwards, Laurent Andre
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -8,59 +8,32 @@
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OF THE SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WwDevicesDotNet
+namespace WwDevicesDotNet.Winctrl.FcuAndEfis
 {
-    /// <summary>
-    /// An enumeration of all of the USB devices that the library can interact with.
-    /// </summary>
-    public enum Device
+    public class FcuEfisLeds : IFrontpanelLeds
     {
-        /// <summary>
-        /// A Winctrl Airbus MCDU.
-        /// </summary>
-        WinctrlMcdu,
+        public bool Loc { get; set; }
+        public bool Ap1 { get; set; }
+        public bool Ap2 { get; set; }
+        public bool AThr { get; set; }
+        public bool Exped { get; set; }
+        public byte ExpedYellowBrightness { get; set; } = 0;
+        public bool Appr { get; set; }
 
-        /// <summary>
-        /// A Winctrl Boeing 777 PFP-7.
-        /// </summary>
-        WinctrlPfp7,
+        public bool LeftFd { get; set; }
+        public bool LeftLs { get; set; }
+        public bool LeftCstr { get; set; }
+        public bool LeftWpt { get; set; }
+        public bool LeftVorD { get; set; }
+        public bool LeftNdb { get; set; }
+        public bool LeftArpt { get; set; }
 
-        /// <summary>
-        /// A Winctrl Boeing 737 PFP-3N. I do not have one of these so it might not work!
-        /// </summary>
-        WinctrlPfp3N,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel (standalone, no EFIS attached).
-        /// </summary>
-        WinctrlFcu,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with left EFIS attached.
-        /// </summary>
-        WinctrlFcuLeftEfis,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with right EFIS attached.
-        /// </summary>
-        WinctrlFcuRightEfis,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with both left and right EFIS attached.
-        /// </summary>
-        WinctrlFcuBothEfis,
-
-        /// <summary>
-        /// A Winctrl PAP-3 Primary Autopilot Panel.
-        /// </summary>
-        WinctrlPap3,
-
-        /// <summary>
-        /// A Winctrl PFP-4.
-        /// </summary>
-        WinctrlPfp4,
-
-
-        WinctrlPdc3n,
+        public bool RightFd { get; set; }
+        public bool RightLs { get; set; }
+        public bool RightCstr { get; set; }
+        public bool RightWpt { get; set; }
+        public bool RightVorD { get; set; }
+        public bool RightNdb { get; set; }
+        public bool RightArpt { get; set; }
     }
 }

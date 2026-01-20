@@ -11,15 +11,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using HidSharp;
-using WwDevicesDotNet.WinWing.FcuAndEfis;
-using WwDevicesDotNet.WinWing.Pap3;
-using WwDevicesDotNet.WinWing.Pdc3nm;
+using WwDevicesDotNet.Winctrl.FcuAndEfis;
+using WwDevicesDotNet.Winctrl.Pap3;
+using WwDevicesDotNet.Winctrl.Pdc3nm;
 
 namespace WwDevicesDotNet
 {
     /// <summary>
     /// Finds USB devices and creates instances of <see cref="IFrontpanel"/> implementations
-    /// for them. Supports FCU, EFIS, and other WinWing control panels.
+    /// for them. Supports FCU, EFIS, and other Winctrl control panels.
     /// </summary>
     public static class FrontpanelFactory
     {
@@ -113,22 +113,22 @@ namespace WwDevicesDotNet
                     .FirstOrDefault();
                 if(hidDevice != null) {
                     switch(deviceId.Device) {
-                        case Device.WinWingFcu:
-                        case Device.WinWingFcuLeftEfis:
-                        case Device.WinWingFcuRightEfis:
-                        case Device.WinWingFcuBothEfis:
+                        case Device.WinctrlFcu:
+                        case Device.WinctrlFcuLeftEfis:
+                        case Device.WinctrlFcuRightEfis:
+                        case Device.WinctrlFcuBothEfis:
                             // All FCU configurations use the same device class
                             // The device ID determines which configuration is present
                             var fcu = new FcuEfisDevice(hidDevice, deviceId);
                             fcu.Initialise();
                             result = fcu;
                             break;
-                        case Device.WinWingPap3:
+                        case Device.WinctrlPap3:
                             var pap3 = new Pap3Device(hidDevice, deviceId);
                             pap3.Initialise();
                             result = pap3;
                             break;
-                        case Device.WinWingPdc3n:
+                        case Device.WinctrlPdc3n:
                             var pdc3 = new Pdc3Device(hidDevice, deviceId);
                             pdc3.Initialise();
                             result = pdc3;

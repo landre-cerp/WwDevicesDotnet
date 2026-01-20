@@ -18,165 +18,165 @@ namespace WwDevicesDotNet
     public static class SupportedDevices
     {
         /// <summary>
-        /// The identifier for a WinWing MCDU device set to the left-hand seat position.
+        /// The identifier for a Winctrl MCDU device set to the left-hand seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingMcduCaptainDevice = new DeviceIdentifier(
-            "Winwing MCDU (Captain)", 0x4098, 0xBB36, Device.WinWingMcdu, DeviceUser.Captain, DeviceType.AirbusA320Mcdu
+        public static readonly DeviceIdentifier WinctrlMcduCaptainDevice = new DeviceIdentifier(
+            "Winctrl MCDU (Captain)", 0x4098, 0xBB36, Device.WinctrlMcdu, DeviceUser.Captain, DeviceType.AirbusA320Mcdu
         );
 
         /// <summary>
-        /// The identifier for a WinWing MCDU device set to the right-hand seat position.
+        /// The identifier for a Winctrl MCDU device set to the right-hand seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingMcduFirstOfficerDevice = new DeviceIdentifier(
-            "Winwing MCDU (F/O)", 0x4098, 0xBB3E, Device.WinWingMcdu, DeviceUser.FirstOfficer, DeviceType.AirbusA320Mcdu
+        public static readonly DeviceIdentifier WinctrlMcduFirstOfficerDevice = new DeviceIdentifier(
+            "Winctrl MCDU (F/O)", 0x4098, 0xBB3E, Device.WinctrlMcdu, DeviceUser.FirstOfficer, DeviceType.AirbusA320Mcdu
         );
 
         /// <summary>
-        /// The identifier for a WinWing MCDU device set to the observer seat position.
+        /// The identifier for a Winctrl MCDU device set to the observer seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingMcduObserverDevice = new DeviceIdentifier(
-            "Winwing MCDU (Observer)", 0x4098, 0xBB3A, Device.WinWingMcdu, DeviceUser.Observer, DeviceType.AirbusA320Mcdu
+        public static readonly DeviceIdentifier WinctrlMcduObserverDevice = new DeviceIdentifier(
+            "Winctrl MCDU (Observer)", 0x4098, 0xBB3A, Device.WinctrlMcdu, DeviceUser.Observer, DeviceType.AirbusA320Mcdu
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-3N device set to the left-hand seat position.
+        /// The identifier for a Winctrl PFP-3N device set to the left-hand seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp3NCaptainDevice = new DeviceIdentifier(
-            "Winwing PFP-3N (Captain)", 0x4098, 0xBB35, Device.WinWingPfp3N, DeviceUser.Captain, DeviceType.Boeing737NGPfp
+        public static readonly DeviceIdentifier WinctrlPfp3NCaptainDevice = new DeviceIdentifier(
+            "Winctrl PFP-3N (Captain)", 0x4098, 0xBB35, Device.WinctrlPfp3N, DeviceUser.Captain, DeviceType.Boeing737NGPfp
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-3N device set to the right-hand seat position.
+        /// The identifier for a Winctrl PFP-3N device set to the right-hand seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp3NFirstOfficerDevice = new DeviceIdentifier(
-            "Winwing PFP-3N (F/O)", 0x4098, 0xBB3D, Device.WinWingPfp3N, DeviceUser.FirstOfficer, DeviceType.Boeing737NGPfp
+        public static readonly DeviceIdentifier WinctrlPfp3NFirstOfficerDevice = new DeviceIdentifier(
+            "Winctrl PFP-3N (F/O)", 0x4098, 0xBB3D, Device.WinctrlPfp3N, DeviceUser.FirstOfficer, DeviceType.Boeing737NGPfp
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-3N device set to the observer seat position.
+        /// The identifier for a Winctrl PFP-3N device set to the observer seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp3NObserverDevice = new DeviceIdentifier(
-            "Winwing PFP-3N (Observer)", 0x4098, 0xBB39, Device.WinWingPfp3N, DeviceUser.Observer, DeviceType.Boeing737NGPfp
+        public static readonly DeviceIdentifier WinctrlPfp3NObserverDevice = new DeviceIdentifier(
+            "Winctrl PFP-3N (Observer)", 0x4098, 0xBB39, Device.WinctrlPfp3N, DeviceUser.Observer, DeviceType.Boeing737NGPfp
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-7 device set to the left-hand seat position.
+        /// The identifier for a Winctrl PFP-7 device set to the left-hand seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp7CaptainDevice = new DeviceIdentifier(
-            "Winwing PFP-7 (Captain)", 0x4098, 0xBB37, Device.WinWingPfp7, DeviceUser.Captain, DeviceType.Boeing777Pfp
+        public static readonly DeviceIdentifier WinctrlPfp7CaptainDevice = new DeviceIdentifier(
+            "Winctrl PFP-7 (Captain)", 0x4098, 0xBB37, Device.WinctrlPfp7, DeviceUser.Captain, DeviceType.Boeing777Pfp
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-7 device set to the right-hand seat position.
+        /// The identifier for a Winctrl PFP-7 device set to the right-hand seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp7FirstOfficerDevice = new DeviceIdentifier(
-            "Winwing PFP-7 (F/O)", 0x4098, 0xBB3F, Device.WinWingPfp7, DeviceUser.FirstOfficer, DeviceType.Boeing777Pfp
+        public static readonly DeviceIdentifier WinctrlPfp7FirstOfficerDevice = new DeviceIdentifier(
+            "Winctrl PFP-7 (F/O)", 0x4098, 0xBB3F, Device.WinctrlPfp7, DeviceUser.FirstOfficer, DeviceType.Boeing777Pfp
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-7 device set to the observer seat position.
+        /// The identifier for a Winctrl PFP-7 device set to the observer seat position.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp7ObserverDevice = new DeviceIdentifier(
-            "Winwing PFP-7 (Observer)", 0x4098, 0xBB3B, Device.WinWingPfp7, DeviceUser.Observer, DeviceType.Boeing777Pfp
+        public static readonly DeviceIdentifier WinctrlPfp7ObserverDevice = new DeviceIdentifier(
+            "Winctrl PFP-7 (Observer)", 0x4098, 0xBB3B, Device.WinctrlPfp7, DeviceUser.Observer, DeviceType.Boeing777Pfp
         );
 
         /// <summary>
-        /// The identifier for a WinWing FCU device (standalone, no EFIS).
+        /// The identifier for a Winctrl FCU device (standalone, no EFIS).
         /// </summary>
-        public static readonly DeviceIdentifier WinWingFcuDevice = new DeviceIdentifier(
-            "Winwing FCU", 0x4098, 0xBB10, Device.WinWingFcu, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
+        public static readonly DeviceIdentifier WinctrlFcuDevice = new DeviceIdentifier(
+            "Winctrl FCU", 0x4098, 0xBB10, Device.WinctrlFcu, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
         );
 
         /// <summary>
-        /// The identifier for a WinWing FCU device with left EFIS attached.
+        /// The identifier for a Winctrl FCU device with left EFIS attached.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingFcuLeftEfisDevice = new DeviceIdentifier(
-            "Winwing FCU + Left EFIS", 0x4098, 0xBC1D, Device.WinWingFcuLeftEfis, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
+        public static readonly DeviceIdentifier WinctrlFcuLeftEfisDevice = new DeviceIdentifier(
+            "Winctrl FCU + Left EFIS", 0x4098, 0xBC1D, Device.WinctrlFcuLeftEfis, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
         );
 
         /// <summary>
-        /// The identifier for a WinWing FCU device with right EFIS attached.
+        /// The identifier for a Winctrl FCU device with right EFIS attached.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingFcuRightEfisDevice = new DeviceIdentifier(
-            "Winwing FCU + Right EFIS", 0x4098, 0xBC1E, Device.WinWingFcuRightEfis, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
+        public static readonly DeviceIdentifier WinctrlFcuRightEfisDevice = new DeviceIdentifier(
+            "Winctrl FCU + Right EFIS", 0x4098, 0xBC1E, Device.WinctrlFcuRightEfis, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
         );
 
         /// <summary>
-        /// The identifier for a WinWing FCU device with both left and right EFIS attached.
+        /// The identifier for a Winctrl FCU device with both left and right EFIS attached.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingFcuBothEfisDevice = new DeviceIdentifier(
-            "Winwing FCU + Both EFIS", 0x4098, 0xBA01, Device.WinWingFcuBothEfis, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
+        public static readonly DeviceIdentifier WinctrlFcuBothEfisDevice = new DeviceIdentifier(
+            "Winctrl FCU + Both EFIS", 0x4098, 0xBA01, Device.WinctrlFcuBothEfis, DeviceUser.NotApplicable, DeviceType.AirbusA320Fcu
         );
 
         /// <summary>
-        /// The identifier for a WinWing PAP-3 Primary Autopilot Panel.
+        /// The identifier for a Winctrl PAP-3 Primary Autopilot Panel.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPap3Device = new DeviceIdentifier(
-            "Winwing PAP-3", 0x4098, 0xBF0F, Device.WinWingPap3, DeviceUser.NotApplicable, DeviceType.Boeing737FrontPanel
+        public static readonly DeviceIdentifier WinctrlPap3Device = new DeviceIdentifier(
+            "Winctrl PAP-3", 0x4098, 0xBF0F, Device.WinctrlPap3, DeviceUser.NotApplicable, DeviceType.Boeing737FrontPanel
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-4 device set as Captain/Left seat.
+        /// The identifier for a Winctrl PFP-4 device set as Captain/Left seat.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp4CaptainDevice = new DeviceIdentifier(
-            "Winwing PFP-4 (Captain)", 0x4098, 0xBB38, Device.WinWingPfp4, DeviceUser.NotApplicable, DeviceType.Boeing747Cdu
+        public static readonly DeviceIdentifier WinctrlPfp4CaptainDevice = new DeviceIdentifier(
+            "Winctrl PFP-4 (Captain)", 0x4098, 0xBB38, Device.WinctrlPfp4, DeviceUser.NotApplicable, DeviceType.Boeing747Cdu
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-4 device set as Observer seat.
+        /// The identifier for a Winctrl PFP-4 device set as Observer seat.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp4ObserverDevice = new DeviceIdentifier(
-            "Winwing PFP-4 (Observer)", 0x4098, 0xBB3C, Device.WinWingPfp4, DeviceUser.NotApplicable, DeviceType.Boeing747Cdu
+        public static readonly DeviceIdentifier WinctrlPfp4ObserverDevice = new DeviceIdentifier(
+            "Winctrl PFP-4 (Observer)", 0x4098, 0xBB3C, Device.WinctrlPfp4, DeviceUser.NotApplicable, DeviceType.Boeing747Cdu
         );
 
         /// <summary>
-        /// The identifier for a WinWing PFP-4 device set as First Officer/Right seat.
+        /// The identifier for a Winctrl PFP-4 device set as First Officer/Right seat.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPfp4FirstOfficerDevice = new DeviceIdentifier(
-            "Winwing PFP-4 (First Officer)", 0x4098, 0xBB40, Device.WinWingPfp4, DeviceUser.NotApplicable, DeviceType.Boeing747Cdu
+        public static readonly DeviceIdentifier WinctrlPfp4FirstOfficerDevice = new DeviceIdentifier(
+            "Winctrl PFP-4 (First Officer)", 0x4098, 0xBB40, Device.WinctrlPfp4, DeviceUser.NotApplicable, DeviceType.Boeing747Cdu
         );
 
         /// <summary>
-        /// The identifier for a WinWing PDC-3 device Left PDC unit.
+        /// The identifier for a Winctrl PDC-3 device Left PDC unit.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPdc3NDeviceLeft = new DeviceIdentifier(
-            "Winwing PDC-3NL", 0x4098, 0xBB61, Device.WinWingPdc3n, DeviceUser.NotApplicable, DeviceType.PDC3N
+        public static readonly DeviceIdentifier WinctrlPdc3NDeviceLeft = new DeviceIdentifier(
+            "Winctrl PDC-3NL", 0x4098, 0xBB61, Device.WinctrlPdc3n, DeviceUser.NotApplicable, DeviceType.PDC3N
         );
 
         /// <summary>
-        /// The identifier for a WinWing PDC-3 device configured as Right unit.
+        /// The identifier for a Winctrl PDC-3 device configured as Right unit.
         /// </summary>
-        public static readonly DeviceIdentifier WinWingPdc3NDeviceRight = new DeviceIdentifier(
-            "Winwing PDC-3NR", 0x4098, 0xBB62, Device.WinWingPdc3n, DeviceUser.NotApplicable, DeviceType.PDC3N
+        public static readonly DeviceIdentifier WinctrlPdc3NDeviceRight = new DeviceIdentifier(
+            "Winctrl PDC-3NR", 0x4098, 0xBB62, Device.WinctrlPdc3n, DeviceUser.NotApplicable, DeviceType.PDC3N
         );
 
 
         private static readonly DeviceIdentifier[] _AllSupportedDevices = new DeviceIdentifier[] {
-            WinWingMcduCaptainDevice,
-            WinWingMcduFirstOfficerDevice,
-            WinWingMcduObserverDevice,
+            WinctrlMcduCaptainDevice,
+            WinctrlMcduFirstOfficerDevice,
+            WinctrlMcduObserverDevice,
 
-            WinWingPfp3NCaptainDevice,
-            WinWingPfp3NFirstOfficerDevice,
-            WinWingPfp3NObserverDevice,
+            WinctrlPfp3NCaptainDevice,
+            WinctrlPfp3NFirstOfficerDevice,
+            WinctrlPfp3NObserverDevice,
 
-            WinWingPfp7CaptainDevice,
-            WinWingPfp7FirstOfficerDevice,
-            WinWingPfp7ObserverDevice,
+            WinctrlPfp7CaptainDevice,
+            WinctrlPfp7FirstOfficerDevice,
+            WinctrlPfp7ObserverDevice,
 
-            WinWingPfp4CaptainDevice,
-            WinWingPfp4FirstOfficerDevice,
-            WinWingPfp4ObserverDevice
+            WinctrlPfp4CaptainDevice,
+            WinctrlPfp4FirstOfficerDevice,
+            WinctrlPfp4ObserverDevice
         };
 
         private static readonly DeviceIdentifier[] _AllSupportedFrontpanels = new DeviceIdentifier[] {
-            WinWingFcuDevice,
-            WinWingFcuLeftEfisDevice,
-            WinWingFcuRightEfisDevice,
-            WinWingFcuBothEfisDevice,
-            WinWingPap3Device,
-            WinWingPdc3NDeviceLeft,
-            WinWingPdc3NDeviceRight,
+            WinctrlFcuDevice,
+            WinctrlFcuLeftEfisDevice,
+            WinctrlFcuRightEfisDevice,
+            WinctrlFcuBothEfisDevice,
+            WinctrlPap3Device,
+            WinctrlPdc3NDeviceLeft,
+            WinctrlPdc3NDeviceRight,
         };
 
         /// <summary>

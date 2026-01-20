@@ -8,59 +8,44 @@
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OF THE SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WwDevicesDotNet
+using System;
+using System.Collections.Generic;
+using HidSharp;
+
+namespace WwDevicesDotNet.Winctrl.Mcdu
 {
     /// <summary>
-    /// An enumeration of all of the USB devices that the library can interact with.
+    /// The implementation of <see cref="IMcdu"/> for the Winctrl MCDU.
     /// </summary>
-    public enum Device
+    class McduDevice : CommonWinctrlPanel
     {
-        /// <summary>
-        /// A Winctrl Airbus MCDU.
-        /// </summary>
-        WinctrlMcdu,
+        protected override byte CommandPrefix => 0x32;
+
+        private static readonly Dictionary<Led, byte> _LedIndicatorCodeMap = new Dictionary<Led, byte>() {
+            { Led.Fail, 0x08 },
+            { Led.Fm, 0x09 },
+            { Led.Mcdu, 0x0a },
+            { Led.Menu, 0x0b },
+            { Led.Fm1, 0x0c },
+            { Led.Ind, 0x0d },
+            { Led.Rdy, 0x0e },
+            { Led.Line, 0x0f },
+            { Led.Fm2, 0x10 },
+        };
+        protected override Dictionary<Led, byte> LedIndicatorCodeMap => _LedIndicatorCodeMap;
+
+        protected override Func<Key, (int Flag, int Offset)> KeyToFlagOffsetCallback => KeyboardMap.InputReport01FlagAndOffset;
 
         /// <summary>
-        /// A Winctrl Boeing 777 PFP-7.
+        /// Creates a new object.
         /// </summary>
-        WinctrlPfp7,
+        /// <param name="hidDevice"></param>
+        /// <param name="deviceId"></param>
+        public McduDevice(HidDevice hidDevice, DeviceIdentifier deviceId) : base(hidDevice, deviceId)
+        {
+        }
 
-        /// <summary>
-        /// A Winctrl Boeing 737 PFP-3N. I do not have one of these so it might not work!
-        /// </summary>
-        WinctrlPfp3N,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel (standalone, no EFIS attached).
-        /// </summary>
-        WinctrlFcu,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with left EFIS attached.
-        /// </summary>
-        WinctrlFcuLeftEfis,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with right EFIS attached.
-        /// </summary>
-        WinctrlFcuRightEfis,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with both left and right EFIS attached.
-        /// </summary>
-        WinctrlFcuBothEfis,
-
-        /// <summary>
-        /// A Winctrl PAP-3 Primary Autopilot Panel.
-        /// </summary>
-        WinctrlPap3,
-
-        /// <summary>
-        /// A Winctrl PFP-4.
-        /// </summary>
-        WinctrlPfp4,
-
-
-        WinctrlPdc3n,
+        /// <inheritdoc/>
+        ~McduDevice() => Dispose(false);
     }
 }

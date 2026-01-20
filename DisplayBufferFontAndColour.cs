@@ -168,12 +168,12 @@ namespace WwDevicesDotNet
 
         /// <summary>
         /// Converts the font and colour code into the two bytes that describe the font and colour in
-        /// WinWing panel display packets.
+        /// Winctrl panel display packets.
         /// </summary>
         /// <param name="isFirstCell"></param>
         /// <param name="isLastCell"></param>
         /// <returns></returns>
-        public (byte,byte) ToWinWingUsbColourAndFontCode(bool isFirstCell, bool isLastCell)
+        public (byte,byte) ToWinctrlUsbColourAndFontCode(bool isFirstCell, bool isLastCell)
         {
             // Use the lookup table based on foreground and background color ordinals
             var fgOrdinal = ForegroundColourIndex;

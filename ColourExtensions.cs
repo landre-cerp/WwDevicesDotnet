@@ -17,22 +17,22 @@ namespace WwDevicesDotNet
     /// </summary>
     public static class ColourExtensions
     {
-        [Obsolete("Legacy name, use ToWinWingUsbColourAndFontCode instead")]
+        [Obsolete("Legacy name, use ToWinctrlUsbColourAndFontCode instead")]
         public static (byte,byte) ToUsbColourAndFontCode(this Colour colour, bool isSmallFont)
         {
-            return ToWinWingUsbColourAndFontCode(colour, isSmallFont);
+            return ToWinctrlUsbColourAndFontCode(colour, isSmallFont);
         }
 
         /// <summary>
         /// Converts the colour and font classification into the font and colour code used
-        /// by all(?) WinWing panels.
+        /// by all(?) Winctrl panels.
         /// </summary>
         /// <param name="colour"></param>
         /// <param name="isSmallFont"></param>
         /// <returns></returns>
-        public static (byte,byte) ToWinWingUsbColourAndFontCode(this Colour colour, bool isSmallFont)
+        public static (byte,byte) ToWinctrlUsbColourAndFontCode(this Colour colour, bool isSmallFont)
         {
-            var code = ToWinWingColourOrdinal(colour) * 0x21;
+            var code = ToWinctrlColourOrdinal(colour) * 0x21;
             if(isSmallFont) {
                 code += 0x16B;
             }
@@ -41,13 +41,13 @@ namespace WwDevicesDotNet
         }
 
         /// <summary>
-        /// Returns the order in which the colour appears in WinWing's 32bb...1901...0002
+        /// Returns the order in which the colour appears in Winctrl's 32bb...1901...0002
         /// and 32bb...1901...0003 packets. This feeds into the value to send for the colour
         /// when setting foreground (and background?).
         /// </summary>
         /// <param name="colour"></param>
         /// <returns></returns>
-        public static int ToWinWingColourOrdinal(this Colour colour)
+        public static int ToWinctrlColourOrdinal(this Colour colour)
         {
             switch(colour) {
                 case Colour.Black:      return 0;
@@ -70,7 +70,7 @@ namespace WwDevicesDotNet
         /// </summary>
         /// <param name="colour"></param>
         /// <returns></returns>
-        public static int ToDisplayBufferColourIndex(this Colour colour) => ToWinWingColourOrdinal(colour);
+        public static int ToDisplayBufferColourIndex(this Colour colour) => ToWinctrlColourOrdinal(colour);
 
         /// <summary>
         /// Returns the colour associated with the colour index passed across.

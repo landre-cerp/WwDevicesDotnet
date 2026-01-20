@@ -63,9 +63,9 @@ namespace WwDevicesDotNet {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] WinWingFontPacketMap_3x29_json {
+        internal static byte[] WinctrlFontPacketMap_3x29_json {
             get {
-                object obj = ResourceManager.GetObject("WinWingFontPacketMap_3x29_json", resourceCulture);
+                object obj = ResourceManager.GetObject("WinctrlFontPacketMap_3x29_json", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace WwDevicesDotNet {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] WinWingFontPacketMap_3x30_json {
+        internal static byte[] WinctrlFontPacketMap_3x30_json {
             get {
-                object obj = ResourceManager.GetObject("WinWingFontPacketMap_3x30_json", resourceCulture);
+                object obj = ResourceManager.GetObject("WinctrlFontPacketMap_3x30_json", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace WwDevicesDotNet {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] WinWingFontPacketMap_3x31_json {
+        internal static byte[] WinctrlFontPacketMap_3x31_json {
             get {
-                object obj = ResourceManager.GetObject("WinWingFontPacketMap_3x31_json", resourceCulture);
+                object obj = ResourceManager.GetObject("WinctrlFontPacketMap_3x31_json", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace WwDevicesDotNet {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] WinWingFontPacketMap_3x32_json {
+        internal static byte[] WinctrlFontPacketMap_3x32_json {
             get {
-                object obj = ResourceManager.GetObject("WinWingFontPacketMap_3x32_json", resourceCulture);
+                object obj = ResourceManager.GetObject("WinctrlFontPacketMap_3x32_json", resourceCulture);
                 return ((byte[])(obj));
             }
         }
