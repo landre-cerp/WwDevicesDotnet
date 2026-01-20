@@ -1,4 +1,4 @@
-﻿// Copyright © 2025 onwards, Andrew Whewell
+﻿// Copyright © 2025 onwards, Laurent Andre
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -8,59 +8,68 @@
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OF THE SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WwDevicesDotNet
+namespace WwDevicesDotNet.Winctrl.Pdc3nm
 {
     /// <summary>
-    /// An enumeration of all of the USB devices that the library can interact with.
+    /// An enumeration of all of the buttons and controls on the PDC3 Autopilot front panel
     /// </summary>
-    public enum Device
+    public enum Control
     {
-        /// <summary>
-        /// A Winctrl Airbus MCDU.
-        /// </summary>
-        WinctrlMcdu,
 
-        /// <summary>
-        /// A Winctrl Boeing 777 PFP-7.
-        /// </summary>
-        WinctrlPfp7,
+        // Horizontal buttons
+        WXR,
+        STA,
+        WPT,
+        ARPT,
+        DATA,
+        POS,
+        TERR,
 
-        /// <summary>
-        /// A Winctrl Boeing 737 PFP-3N. I do not have one of these so it might not work!
-        /// </summary>
-        WinctrlPfp3N,
+        Nav1Vor1,
+        Nav1Off,
+        Nav1Adf1,
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel (standalone, no EFIS attached).
-        /// </summary>
-        WinctrlFcu,
+        Nav2Vor2,
+        Nav2Off,
+        Nav2Adf2,
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with left EFIS attached.
-        /// </summary>
-        WinctrlFcuLeftEfis,
+        MinsBaro,
+        MinsRadio,
+        MinsRst,
+        MinsCenter,
+        MinsIncSlow,
+        MinsDecSlow,
+        MinsIncFast,
+        MinsDecFast,
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with right EFIS attached.
-        /// </summary>
-        WinctrlFcuRightEfis,
+        FPV,
+        MTRS,
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with both left and right EFIS attached.
-        /// </summary>
-        WinctrlFcuBothEfis,
+        BaroIn,
+        BaroHpa,
+        BaroStd,
+        BaroIncSlow,
+        BaroDecSlow,
+        BaroCenter,
+        BaroIncFast,
+        BaroDecFast,
 
-        /// <summary>
-        /// A Winctrl PAP-3 Primary Autopilot Panel.
-        /// </summary>
-        WinctrlPap3,
+        ModeApp,
+        ModeVor,
+        ModeMap,
+        ModePln,
+        ModeCtr, 
 
-        /// <summary>
-        /// A Winctrl PFP-4.
-        /// </summary>
-        WinctrlPfp4,
+        Range5,
+        Range10,
+        Range20,
+        Range40,
+        Range80,
+        Range160,
+        Range320,
+        Range640,
+        RangeTFC
 
 
-        WinctrlPdc3n,
     }
 }

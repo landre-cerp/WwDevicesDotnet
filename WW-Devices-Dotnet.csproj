@@ -8,13 +8,13 @@
         <PackageId>ww-devices-dotnet</PackageId>
         <Title>WW-Devices-Dotnet</Title>
         <Authors>Laurent Andre</Authors>
-        <Description>A .NET Standard 2.0 library for WinWing CDU and Front Panel devices (MCDU, FCU, PFP-3N, PFP-7, PFP-4, PAP-3, PDC-3N)</Description>
+        <Description>A .NET Standard 2.0 library for Winctrl CDU and Front Panel devices (MCDU, FCU, PFP-3N, PFP-7, PFP-4, PAP-3, PDC-3N)</Description>
         <Copyright>Copyright © 2025 onwards, Laurent Andre</Copyright>
         <PackageProjectUrl>https://github.com/landre-cerp/WwDevicesDotnet</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/landre-cerp/WwDevicesDotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>winwing; mcdu; fcu; cdu; frontpanel; .net; csharp; aviation; flight-simulator</PackageTags>
+        <PackageTags>Winctrl; mcdu; fcu; cdu; frontpanel; .net; csharp; aviation; flight-simulator</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <Version>1.0.0</Version>
         <IsPackable>true</IsPackable>

@@ -67,7 +67,7 @@ namespace WwDevicesDotNet
             set => Alpha = value;
         }
 
-        public string WinWingColourString => $"{B:X2}{G:X2}{R:X2}{A:X2}";
+        public string WinctrlColourString => $"{B:X2}{G:X2}{R:X2}{A:X2}";
 
         public override string ToString() => $"#{R:X2}{G:X2}{B:X2}{A:X2}";
 

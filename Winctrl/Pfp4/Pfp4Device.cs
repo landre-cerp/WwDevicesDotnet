@@ -8,59 +8,35 @@
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OF THE SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace WwDevicesDotNet
+using System;
+using System.Collections.Generic;
+using HidSharp;
+
+namespace WwDevicesDotNet.Winctrl.Pfp4
 {
     /// <summary>
-    /// An enumeration of all of the USB devices that the library can interact with.
+    /// Implements <see cref="ICdu"/> for a Winctrl PFP-4.
     /// </summary>
-    public enum Device
+    class Pfp4Device : CommonWinctrlPanel
     {
-        /// <summary>
-        /// A Winctrl Airbus MCDU.
-        /// </summary>
-        WinctrlMcdu,
+        protected override byte CommandPrefix => 0x34;
 
-        /// <summary>
-        /// A Winctrl Boeing 777 PFP-7.
-        /// </summary>
-        WinctrlPfp7,
+        private static readonly Dictionary<Led, byte> _LedIndicatorCodeMap = new Dictionary<Led, byte>() {
+            { Led.Dspy, 0x03 },
+            { Led.Fail, 0x04 },
+            { Led.Msg, 0x05 },
+            { Led.Ofst, 0x06 },
+            { Led.Exec, 0x07 },
+        };
+        protected override Dictionary<Led, byte> LedIndicatorCodeMap => _LedIndicatorCodeMap;
 
-        /// <summary>
-        /// A Winctrl Boeing 737 PFP-3N. I do not have one of these so it might not work!
-        /// </summary>
-        WinctrlPfp3N,
+        protected override Func<Key, (int Flag, int Offset)> KeyToFlagOffsetCallback => KeyboardMap.InputReport01FlagAndOffset;
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel (standalone, no EFIS attached).
-        /// </summary>
-        WinctrlFcu,
+        public Pfp4Device(HidDevice hidDevice, DeviceIdentifier deviceId) : base(hidDevice, deviceId)
+        {
+        }
 
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with left EFIS attached.
-        /// </summary>
-        WinctrlFcuLeftEfis,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with right EFIS attached.
-        /// </summary>
-        WinctrlFcuRightEfis,
-
-        /// <summary>
-        /// A Winctrl Airbus FCU panel with both left and right EFIS attached.
-        /// </summary>
-        WinctrlFcuBothEfis,
-
-        /// <summary>
-        /// A Winctrl PAP-3 Primary Autopilot Panel.
-        /// </summary>
-        WinctrlPap3,
-
-        /// <summary>
-        /// A Winctrl PFP-4.
-        /// </summary>
-        WinctrlPfp4,
-
-
-        WinctrlPdc3n,
+        /// <inheritdoc/>
+        ~Pfp4Device() => Dispose(false);
     }
 }

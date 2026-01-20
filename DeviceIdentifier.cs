@@ -14,7 +14,7 @@ using System.Text;
 namespace WwDevicesDotNet
 {
     /// <summary>
-    /// Identifies a USB winwing device supported
+    /// Identifies a USB Winctrl device supported
     /// </summary>
     public class DeviceIdentifier
     {

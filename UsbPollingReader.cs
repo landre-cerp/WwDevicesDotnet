@@ -22,7 +22,7 @@ namespace WwDevicesDotNet
     /// <remarks><para>
     /// HidStream turned out to be great for sending stuff, not so great for reading. It
     /// could well be me messing something up, but for all the world it looks like it is
-    /// trying to buffer the input coming from the devices. The WinWing MCDU is sending
+    /// trying to buffer the input coming from the devices. The Winctrl MCDU is sending
     /// packets like they're going out of style, certainly faster than I can process them,
     /// and consequently that buffer gets out of hand. The end result is a very laggy input
     /// that gets worse over time.
