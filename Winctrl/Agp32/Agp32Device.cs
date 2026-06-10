@@ -192,6 +192,11 @@ namespace WwDevicesDotNet.Winctrl.Agp32
         /// <inheritdoc/>
         public override void UpdateLeds(IFrontpanelLeds leds)
         {
+            if (!IsConnected)
+            {
+                return;
+            }
+
             if (leds is Agp32Leds agp32Leds)
             {
                 foreach (var kvp in agp32Leds.States)
