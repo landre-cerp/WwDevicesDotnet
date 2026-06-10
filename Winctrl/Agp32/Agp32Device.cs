@@ -175,6 +175,11 @@ namespace WwDevicesDotNet.Winctrl.Agp32
         /// <inheritdoc/>
         public override void UpdateDisplay(IFrontpanelState state)
         {
+            if (!IsConnected)
+            {
+                return;
+            }
+
             if (state is Agp32State agp32State)
             {
                 foreach (var packet in BuildAgp32DisplayCommands(agp32State))
