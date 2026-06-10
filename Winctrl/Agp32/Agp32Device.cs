@@ -376,10 +376,10 @@ namespace WwDevicesDotNet.Winctrl.Agp32
 
         /// <summary>Clock / UTC "HHMMSS", e.g. "172917".</summary>
         public string ClockDisplay { get; set; }
-        public int? Speed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int? Heading { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int? Altitude { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int? VerticalSpeed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int? Speed { get; set; }
+        public int? Heading { get; set; }
+        public int? Altitude { get; set; }
+        public int? VerticalSpeed { get; set; }
         public string EtDisplay { get; set; }
 
         /// <summary>
