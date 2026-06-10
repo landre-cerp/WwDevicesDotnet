@@ -150,6 +150,13 @@ namespace WwDevicesDotNet
             "Winctrl PDC-3NR", 0x4098, 0xBB62, Device.WinctrlPdc3n, DeviceUser.NotApplicable, DeviceType.PDC3N
         );
 
+        /// <summary>
+        /// The identifier for a Winctrl 32 AGP Metal panel.
+        /// </summary>
+        public static readonly DeviceIdentifier WinctrlAgp32Device = new DeviceIdentifier(
+            "Winctrl 32 AGP Metal", 0x4098, 0xBB80, Device.WinctrlAgp32, DeviceUser.NotApplicable, DeviceType.Agp32
+        );
+
 
         private static readonly DeviceIdentifier[] _AllSupportedDevices = new DeviceIdentifier[] {
             WinctrlMcduCaptainDevice,
@@ -177,6 +184,7 @@ namespace WwDevicesDotNet
             WinctrlPap3Device,
             WinctrlPdc3NDeviceLeft,
             WinctrlPdc3NDeviceRight,
+            WinctrlAgp32Device,
         };
 
         /// <summary>

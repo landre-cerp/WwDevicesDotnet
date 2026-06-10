@@ -14,6 +14,7 @@ using HidSharp;
 using WwDevicesDotNet.Winctrl.FcuAndEfis;
 using WwDevicesDotNet.Winctrl.Pap3;
 using WwDevicesDotNet.Winctrl.Pdc3nm;
+using WwDevicesDotNet.Winctrl.Agp32;
 
 namespace WwDevicesDotNet
 {
@@ -132,6 +133,11 @@ namespace WwDevicesDotNet
                             var pdc3 = new Pdc3Device(hidDevice, deviceId);
                             pdc3.Initialise();
                             result = pdc3;
+                            break;
+                        case Device.WinctrlAgp32:
+                            var agp32 = new Agp32Device(hidDevice, deviceId);
+                            agp32.Initialise();
+                            result = agp32;
                             break;
                     }
                 }
