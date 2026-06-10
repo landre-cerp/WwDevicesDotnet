@@ -29,7 +29,7 @@ need to substitute references to `{CP}` with the appropriate two-byte code.
 | MCDU    | 32 bb |
 | PFP-7   | 33 bb |
 | PFP-4   | 34 bb |
-| AGP32	  | ?? |
+| AGP32   | 80 bb |
 
 It's only a sample of two so far, but it is interesting that the CPs look similar
 to the USB products IDs, and also that the interval between the MCDU and PFP-7 CPs
