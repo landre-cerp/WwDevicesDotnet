@@ -162,7 +162,12 @@ namespace WwDevicesDotNet.Winctrl.Agp32
         /// <inheritdoc/>
         public override void SetBrightness(byte panelBacklight, byte lcdBacklight, byte ledBacklight)
         {
-            SendCommand(BuildIlluminationCommand(0x00, panelBacklight));   
+            if (!IsConnected)
+            {
+                return;
+            }
+
+            SendCommand(BuildIlluminationCommand(0x00, panelBacklight));
             SendCommand(BuildIlluminationCommand(0x01, lcdBacklight));
             SendCommand(BuildIlluminationCommand(0x02, ledBacklight));
         }
