@@ -211,6 +211,11 @@ namespace WwDevicesDotNet.Winctrl.Agp32
         /// </summary>
         public void SetLed(Agp32Led led, bool on)
         {
+            if (!IsConnected)
+            {
+                return;
+            }
+
             SendCommand(BuildIlluminationCommand((byte)led, on ? (byte)0x01 : (byte)0x00));
         }
 
