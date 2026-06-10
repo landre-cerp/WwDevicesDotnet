@@ -24,6 +24,7 @@ This library supports the following Winctrl devices:
 - **Winctrl FCU** (Airbus A320 Flight Control Unit) - Standalone or with EFIS panels (left, right, or both)
 - **Winctrl PAP-3** (Boeing 737 Primary Autopilot Panel)
 - **Winctrl PDC-3N** (Left and Right configurations)
+- **Winctrl AGP32** (Airbus A320)
 
 Each device can be connected via USB and is automatically detected by the library. Use `CduFactory.FindLocalDevices()` to enumerate connected CDU devices or `FrontpanelFactory.FindLocalDevices()` to enumerate connected front panel devices.
 

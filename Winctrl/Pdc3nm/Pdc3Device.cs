@@ -92,27 +92,25 @@ namespace WwDevicesDotNet.Winctrl.Pdc3nm
             if(length < 25)
                 return;
 
-            // Process ambient light sensor data (offsets 17-18 for left, 19-20 for right)
-            var leftSensor = (ushort)(data[17] | (data[18] << 8));
-            var rightSensor = (ushort)(data[19] | (data[20] << 8));
+            if(TryReadAmbientLightSensors(data, length, out var leftSensor, out var rightSensor)) {
+                var leftChanged = leftSensor != LeftAmbientLightNative;
+                var rightChanged = rightSensor != RightAmbientLightNative;
 
-            var leftChanged = leftSensor != LeftAmbientLightNative;
-            var rightChanged = rightSensor != RightAmbientLightNative;
+                if(leftChanged || rightChanged) {
+                    LeftAmbientLightNative = leftSensor;
+                    RightAmbientLightNative = rightSensor;
 
-            if(leftChanged || rightChanged) {
-                LeftAmbientLightNative = leftSensor;
-                RightAmbientLightNative = rightSensor;
+                    // Calculate normalized percentage (0-100)
+                    var avg = ((double)LeftAmbientLightNative + (double)RightAmbientLightNative) / 2.0;
+                    avg /= 0xfff; // Normalize to 0-1
+                    var newPercent = (int)(100.0 * avg);
+                    var percentChanged = newPercent != AmbientLightPercent;
+                    AmbientLightPercent = newPercent;
 
-                // Calculate normalized percentage (0-100)
-                var avg = ((double)LeftAmbientLightNative + (double)RightAmbientLightNative) / 2.0;
-                avg /= 0xfff; // Normalize to 0-1
-                var newPercent = (int)(100.0 * avg);
-                var percentChanged = newPercent != AmbientLightPercent;
-                AmbientLightPercent = newPercent;
-
-                // Raise events
-                if(percentChanged) {
-                    AmbientLightChanged?.Invoke(this, EventArgs.Empty);
+                    // Raise events
+                    if(percentChanged) {
+                        AmbientLightChanged?.Invoke(this, EventArgs.Empty);
+                    }
                 }
             }
 

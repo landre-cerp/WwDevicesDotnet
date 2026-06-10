@@ -31,6 +31,14 @@ namespace WwDevicesDotNet.Winctrl
         protected Task _InputLoopTask;
         protected readonly byte[] _LastInputReport = new byte[25];
 
+        const int _LegacyLeftAmbientLightSensorOffset = 17;
+        const int _LegacyRightAmbientLightSensorOffset = 19;
+        const int _AxisLeftAmbientLightSensorOffset = 16;
+        const int _AxisRightAmbientLightSensorOffset = 18;
+        const int _AxisOutputSwitchMarkerOffset = 20;
+        const byte _AxisOutputSwitchMarkerLow = 0xFE;
+        const byte _AxisOutputSwitchMarkerHigh = 0xFF;
+
         /// <inheritdoc/>
         public DeviceIdentifier DeviceId { get; }
 
@@ -48,6 +56,9 @@ namespace WwDevicesDotNet.Winctrl
 
         /// <inheritdoc/>
         public event EventHandler Disconnected;
+
+        /// <inheritdoc/>
+        public event EventHandler<FrontpanelInputReportEventArgs> InputReportReceived;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseFrontpanelDevice{TControl}"/> class.
@@ -154,7 +165,10 @@ namespace WwDevicesDotNet.Winctrl
                     if(_HidStream != null && _HidStream.CanRead) {
                         var bytesRead = _HidStream.Read(readBuffer, 0, readBuffer.Length);
                         if(bytesRead > 0 && readBuffer[0] == 0x01) {
-                            ProcessReport(readBuffer, bytesRead);
+                            var reportData = new byte[bytesRead];
+                            Array.Copy(readBuffer, reportData, bytesRead);
+                            InputReportReceived?.Invoke(this, new FrontpanelInputReportEventArgs(reportData));
+                            ProcessReport(reportData, bytesRead);
                         }
                     }
                 } catch(TimeoutException) {
@@ -204,6 +218,32 @@ namespace WwDevicesDotNet.Winctrl
             }
 
             Array.Copy(data, _LastInputReport, length);
+        }
+
+        protected bool TryReadAmbientLightSensors(byte[] data, int length, out ushort leftSensor, out ushort rightSensor)
+        {
+            leftSensor = 0;
+            rightSensor = 0;
+
+            if(length <= _LegacyRightAmbientLightSensorOffset + 1) {
+                return false;
+            }
+
+            var useAxisOffsets = length > _AxisOutputSwitchMarkerOffset + 1
+                && data[_AxisOutputSwitchMarkerOffset] == _AxisOutputSwitchMarkerLow
+                && data[_AxisOutputSwitchMarkerOffset + 1] == _AxisOutputSwitchMarkerHigh;
+
+            var leftOffset = useAxisOffsets ? _AxisLeftAmbientLightSensorOffset : _LegacyLeftAmbientLightSensorOffset;
+            var rightOffset = useAxisOffsets ? _AxisRightAmbientLightSensorOffset : _LegacyRightAmbientLightSensorOffset;
+
+            leftSensor = ReadSensorValue(data, leftOffset);
+            rightSensor = ReadSensorValue(data, rightOffset);
+            return true;
+        }
+
+        ushort ReadSensorValue(byte[] data, int offset)
+        {
+            return (ushort)(data[offset] | (data[offset + 1] << 8));
         }
 
         /// <summary>

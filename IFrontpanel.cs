@@ -49,6 +49,11 @@ namespace WwDevicesDotNet
         event EventHandler Disconnected;
 
         /// <summary>
+        /// Raised whenever an input report is received from the device.
+        /// </summary>
+        event EventHandler<FrontpanelInputReportEventArgs> InputReportReceived;
+
+        /// <summary>
         /// Updates the display(s) on the frontpanel.
         /// </summary>
         /// <param name="state">The state to display.</param>
@@ -87,6 +92,22 @@ namespace WwDevicesDotNet
         public FrontpanelEventArgs(string controlId, byte[] rawData)
         {
             ControlId = controlId;
+            RawData = rawData;
+        }
+    }
+
+    /// <summary>
+    /// Event arguments for frontpanel input report events.
+    /// </summary>
+    public class FrontpanelInputReportEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Gets the report data from the device.
+        /// </summary>
+        public byte[] RawData { get; }
+
+        public FrontpanelInputReportEventArgs(byte[] rawData)
+        {
             RawData = rawData;
         }
     }

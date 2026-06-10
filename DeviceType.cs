@@ -33,5 +33,7 @@ namespace WwDevicesDotNet
 
         PDC3N,
         PDC3M,
+
+        Agp32,
     }
 }
