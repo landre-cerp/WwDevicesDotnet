@@ -69,11 +69,35 @@ namespace WwDevicesDotNet.Winctrl.Agp32
         // Standard 7-segment glyphs for '0'..'9', bit 0 = segment a .. bit 6 = segment g.
         static readonly byte[] _Digit7Seg = { 0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F };
 
+        const int LeftAxisLightSensorOffset = 17;
+        const int RightAxisLightSensorOffset = 19;
+        const uint AxisLightSensorMax = 4095;
+
         ushort _SequenceNumber;
         readonly Stopwatch _Uptime = Stopwatch.StartNew();
 
         /// <inheritdoc/>
         public override IFrontpanelCapabilities Capabilities { get; } = new Agp32Capabilities();
+
+        /// <summary>
+        /// Gets the left raw axis-light sensor value (0..4095).
+        /// </summary>
+        public ushort LeftAxisLightRaw { get; private set; }
+
+        /// <summary>
+        /// Gets the right raw axis-light sensor value (0..4095).
+        /// </summary>
+        public ushort RightAxisLightRaw { get; private set; }
+
+        /// <summary>
+        /// Gets the fused axis-light value scaled to 0..65535.
+        /// </summary>
+        public ushort AxisLightValue { get; private set; }
+
+        /// <summary>
+        /// Raised when axis-light values change.
+        /// </summary>
+        public event EventHandler<Agp32AxisLightChangedEventArgs> AxisLightChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Agp32Device"/> class.
@@ -115,10 +139,23 @@ namespace WwDevicesDotNet.Winctrl.Agp32
         /// <inheritdoc/>
         protected override void ProcessReport(byte[] data, int length)
         {
-            // No URB IN traffic in the trace (it was filtered on 0xF0 OUT).
-            // Capture input reports while pressing CHR / RST / the date knob
-            // to populate ControlMap, then extend this if report 01 needs more
-            // than the base implementation.
+            if (length >= RightAxisLightSensorOffset + 2)
+            {
+                var leftRaw = (ushort)Math.Min(BitConverter.ToUInt16(data, LeftAxisLightSensorOffset), AxisLightSensorMax);
+                var rightRaw = (ushort)Math.Min(BitConverter.ToUInt16(data, RightAxisLightSensorOffset), AxisLightSensorMax);
+                var average12Bit = ((uint)leftRaw + (uint)rightRaw) / 2;
+                var fusedValue = (ushort)((average12Bit * ushort.MaxValue) / AxisLightSensorMax);
+
+                if (leftRaw != LeftAxisLightRaw || rightRaw != RightAxisLightRaw || fusedValue != AxisLightValue)
+                {
+                    LeftAxisLightRaw = leftRaw;
+                    RightAxisLightRaw = rightRaw;
+                    AxisLightValue = fusedValue;
+
+                    AxisLightChanged?.Invoke(this, new Agp32AxisLightChangedEventArgs(AxisLightValue, LeftAxisLightRaw, RightAxisLightRaw));
+                }
+            }
+
             base.ProcessReport(data, length);
         }
 
@@ -293,6 +330,34 @@ namespace WwDevicesDotNet.Winctrl.Agp32
             buffer[offset++] = (byte)(value >> 8);
             buffer[offset++] = (byte)(value >> 16);
             buffer[offset++] = (byte)(value >> 24);
+        }
+    }
+
+    /// <summary>
+    /// Event arguments for AGP32 axis-light value changes.
+    /// </summary>
+    public class Agp32AxisLightChangedEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Gets the fused axis-light value scaled to 0..65535.
+        /// </summary>
+        public ushort Value { get; }
+
+        /// <summary>
+        /// Gets the left raw axis-light sensor value (0..4095).
+        /// </summary>
+        public ushort LeftRaw { get; }
+
+        /// <summary>
+        /// Gets the right raw axis-light sensor value (0..4095).
+        /// </summary>
+        public ushort RightRaw { get; }
+
+        public Agp32AxisLightChangedEventArgs(ushort value, ushort leftRaw, ushort rightRaw)
+        {
+            Value = value;
+            LeftRaw = leftRaw;
+            RightRaw = rightRaw;
         }
     }
 

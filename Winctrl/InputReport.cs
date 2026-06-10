@@ -19,8 +19,13 @@ namespace WwDevicesDotNet.Winctrl
     {
         public const int ReportCode = 1;
         public const int PacketLength = 25;
-        private const int _LeftAmbientLightSensorOffset = 17;
-        private const int _RightAmbientLightSensorOffset = 19;
+        private const int _LegacyLeftAmbientLightSensorOffset = 17;
+        private const int _LegacyRightAmbientLightSensorOffset = 19;
+        private const int _AxisLeftAmbientLightSensorOffset = 16;
+        private const int _AxisRightAmbientLightSensorOffset = 18;
+        private const int _AxisOutputSwitchMarkerOffset = 20;
+        private const byte _AxisOutputSwitchMarkerLow = 0xFE;
+        private const byte _AxisOutputSwitchMarkerHigh = 0xFF;
 
         private readonly byte[] _Packet = new byte[PacketLength];
 
@@ -53,8 +58,14 @@ namespace WwDevicesDotNet.Winctrl
 
         public (UInt16 LeftSensor, UInt16 RightSensor) AmbientLightSensorValues()
         {
-            var leftSensorValue = ReadSensorValue(_LeftAmbientLightSensorOffset);
-            var rightSensorValue = ReadSensorValue(_RightAmbientLightSensorOffset);
+            var useAxisOffsets = _Packet[_AxisOutputSwitchMarkerOffset] == _AxisOutputSwitchMarkerLow
+                && _Packet[_AxisOutputSwitchMarkerOffset + 1] == _AxisOutputSwitchMarkerHigh;
+
+            var leftOffset = useAxisOffsets ? _AxisLeftAmbientLightSensorOffset : _LegacyLeftAmbientLightSensorOffset;
+            var rightOffset = useAxisOffsets ? _AxisRightAmbientLightSensorOffset : _LegacyRightAmbientLightSensorOffset;
+
+            var leftSensorValue = ReadSensorValue(leftOffset);
+            var rightSensorValue = ReadSensorValue(rightOffset);
             return (leftSensorValue, rightSensorValue);
         }
 
