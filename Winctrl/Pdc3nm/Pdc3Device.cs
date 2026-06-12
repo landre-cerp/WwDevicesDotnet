@@ -125,7 +125,7 @@ namespace WwDevicesDotNet.Winctrl.Pdc3nm
             if(!IsConnected)
                 return;
 
-            SendBrightnessCommand(_Pdc3LedPrefix, _BrightnessPanelBacklight, ledBacklight);
+            SendBrightnessCommand(_Pdc3LedPrefix, _BrightnessPanelBacklight, panelBacklight);
         }
 
        
