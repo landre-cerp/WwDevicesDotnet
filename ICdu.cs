@@ -257,6 +257,15 @@ namespace WwDevicesDotNet
         );
 
         /// <summary>
+        /// Puts the device into its known-good default state: full brightness,
+        /// cleared screen, all LEDs off, with a forced (duplicate-check skipping)
+        /// refresh. The device keeps its state across host restarts, so call this
+        /// after connecting to recover from whatever a previous (possibly crashed)
+        /// session left behind.
+        /// </summary>
+        void Reset();
+
+        /// <summary>
         /// True if the device supports the key passed across.
         /// </summary>
         /// <param name="key"></param>

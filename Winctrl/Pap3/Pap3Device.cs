@@ -349,6 +349,21 @@ namespace WwDevicesDotNet.Winctrl.Pap3
             SendBrightnessCommand(_Pap3LedPrefix, _BrightnessMarkerLight, ledBacklight);
         }
 
+        /// <inheritdoc/>
+        public override void Reset()
+        {
+            base.Reset();
+            // Zeroed values rather than nulls: the PAP3 LCDs turn off on empty fields,
+            // and a freshly reset panel should visibly show it is alive.
+            UpdateDisplay(new Pap3State {
+                Speed = 0,
+                Heading = 0,
+                Altitude = 0,
+                VerticalSpeed = 0,
+            });
+            UpdateLeds(new Pap3Leds());
+        }
+
         List<byte[]> BuildDisplayCommands(Pap3State state)
         {
             var commands = new List<byte[]>();

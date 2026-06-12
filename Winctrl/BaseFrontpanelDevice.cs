@@ -117,6 +117,16 @@ namespace WwDevicesDotNet.Winctrl
         /// <inheritdoc/>
         public abstract void SetBrightness(byte panelBacklight, byte lcdBacklight, byte ledBacklight);
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The default implementation restores full brightness. Devices with
+        /// displays or LEDs override this to also blank them.
+        /// </remarks>
+        public virtual void Reset()
+        {
+            SetBrightness(255, 255, 255);
+        }
+
         /// <summary>
         /// Sends a command to the device.
         /// </summary>

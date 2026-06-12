@@ -72,6 +72,14 @@ namespace WwDevicesDotNet
         /// <param name="lcdBacklight">LCD backlight brightness (0-255).</param>
         /// <param name="ledBacklight">LED backlight brightness (0-255).</param>
         void SetBrightness(byte panelBacklight, byte lcdBacklight, byte ledBacklight);
+
+        /// <summary>
+        /// Puts the device into its known-good default state: visible brightness,
+        /// blank displays, all LEDs off. The device keeps its state across host
+        /// restarts, so call this after connecting to recover from whatever a
+        /// previous (possibly crashed) session left behind.
+        /// </summary>
+        void Reset();
     }
 
     /// <summary>

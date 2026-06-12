@@ -100,6 +100,14 @@ namespace WwDevicesDotNet.Winctrl.FcuAndEfis
         }
 
         /// <inheritdoc/>
+        public override void Reset()
+        {
+            base.Reset();
+            UpdateDisplay(new FcuEfisState());
+            UpdateLeds(new FcuEfisLeds());
+        }
+
+        /// <inheritdoc/>
         public override void SetBrightness(byte panelBacklight, byte lcdBacklight, byte ledBacklight)
         {
             if(!IsConnected)
