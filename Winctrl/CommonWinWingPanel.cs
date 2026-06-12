@@ -479,6 +479,19 @@ namespace WwDevicesDotNet.Winctrl
         }
 
         /// <inheritdoc/>
+        public void Reset()
+        {
+            Screen.Clear();
+            Leds.TurnAllOn(false);
+            DisplayBrightnessPercent = 100;
+            BacklightBrightnessPercent = 100;
+            LedBrightnessPercent = 100;
+            RefreshBrightnesses();
+            RefreshDisplay(skipDuplicateCheck: true);
+            RefreshLeds();
+        }
+
+        /// <inheritdoc/>
         public bool IsKeySupported(Key key) => KeyToFlagOffsetCallback(key).Flag != 0;
 
         /// <summary>

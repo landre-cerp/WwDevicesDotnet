@@ -206,6 +206,21 @@ namespace WwDevicesDotNet.Winctrl.Agp32
             }
         }
 
+        /// <inheritdoc/>
+        public override void Reset()
+        {
+            base.Reset();
+
+            UpdateDisplay(new Agp32State());
+
+            var leds = new Agp32Leds();
+            foreach (Agp32Led led in Enum.GetValues(typeof(Agp32Led)))
+            {
+                leds.Set(led, false);
+            }
+            UpdateLeds(leds);
+        }
+
         /// <summary>
         /// Turns a single LED on or off.
         /// </summary>
