@@ -21,6 +21,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Include=".github\FUNDING.yml" />
+      <None Include=".github\workflows\build.yml" />
+      <None Include=".github\workflows\publish.yml" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="HidSharp" Version="2.6.4" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
