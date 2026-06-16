@@ -140,13 +140,15 @@ namespace WwDevicesDotNet.Winctrl.FcuAndEfis
             // Build FCU display commands
             commands.AddRange(BuildFcuDisplayCommands(state));
 
-            // Build EFIS display commands if panels are present
-            if(HasLeftEfis() && state.LeftBaroPressure.HasValue) {
-                commands.AddRange(BuildEfisDisplayCommand(_LeftEfisPrefix, state.LeftBaroPressure.Value, state.LeftBaroQnh, state.LeftBaroQfe));
+            // Build EFIS display commands if panels are present.
+            // Always send even when pressure is null so the QNH/QFE indicators
+            // are driven to the correct state (null pressure → blank segments).
+            if(HasLeftEfis()) {
+                commands.AddRange(BuildEfisDisplayCommand(_LeftEfisPrefix, state.LeftBaroPressure, state.LeftBaroQnh, state.LeftBaroQfe));
             }
 
-            if(HasRightEfis() && state.RightBaroPressure.HasValue) {
-                commands.AddRange(BuildEfisDisplayCommand(_RightEfisPrefix, state.RightBaroPressure.Value, state.RightBaroQnh, state.RightBaroQfe));
+            if(HasRightEfis()) {
+                commands.AddRange(BuildEfisDisplayCommand(_RightEfisPrefix, state.RightBaroPressure, state.RightBaroQnh, state.RightBaroQfe));
             }
 
             return commands;
@@ -409,12 +411,12 @@ namespace WwDevicesDotNet.Winctrl.FcuAndEfis
             return result;
         }
 
-        List<byte[]> BuildEfisDisplayCommand(ushort prefix, int pressure, bool qnh, bool qfe)
+        List<byte[]> BuildEfisDisplayCommand(ushort prefix, int? pressure, bool qnh, bool qfe)
         {
             var commands = new List<byte[]>();
             var payload = new byte[64];
             var followup = new byte[64];
-            
+
             // Use fixed sequence number 1
             ushort seqNum = 1;
 
@@ -422,7 +424,7 @@ namespace WwDevicesDotNet.Winctrl.FcuAndEfis
             payload[0] = 0xF0;
             payload[1] = 0x00;
             payload[2] = (byte)seqNum;
-            payload[3] = 0x1A;  
+            payload[3] = 0x1A;
             payload[4] = (byte)((prefix >> 8) & 0xFF);
             payload[5] = (byte)(prefix & 0xFF);
             payload[6] = 0x00;
@@ -431,33 +433,37 @@ namespace WwDevicesDotNet.Winctrl.FcuAndEfis
             payload[9] = 0x01;
             payload[10] = 0x00;
             payload[11] = 0x00;
-            payload[12] = 0xFF;  
-            payload[13] = 0xFF;  
-            payload[14] = 0x1D;  
+            payload[12] = 0xFF;
+            payload[13] = 0xFF;
+            payload[14] = 0x1D;
             payload[15] = 0x00;
             payload[16] = 0x00;
             payload[17] = 0x09;
             // Bytes 18-24 are 0x00
 
-            var pressureStr = pressure.ToString().PadLeft(4, '0');
-            
-            // Detect inHg mode: values >= 2000 are inHg (displayed as XX.XX)
-            // hPa range: 870-1085, inHg range: 2570-3200 (representing 25.70-32.00)
-            bool isInHg = pressure >= 2000;
-            
-            var encoded = DataFromStringSwappedEfis(4, pressureStr);
-            
-            payload[0x19] = encoded[0];  // leftmost digit (thousands)
-            payload[0x1A] = encoded[1];  // hundreds
-            payload[0x1B] = encoded[2];  // tens
-            payload[0x1C] = encoded[3];  // ones (rightmost)
+            // Encode pressure digits only when a value is available.
+            // When null, bytes 0x19-0x1C stay 0x00 → all segments blank.
+            if(pressure.HasValue) {
+                var pressureStr = pressure.Value.ToString().PadLeft(4, '0');
 
-            // Add decimal point for inHg mode (after 2nd digit, not 3rd)
-            // For 2992: display as 29.92 (decimal after hundreds digit)
-            // The decimal point in EFIS encoding is bit 0x80 (not 0x01 like in FCU displays)
-            // This is because DataFromStringSwappedEfis remaps: 0x01 → 0x80
-            if(isInHg) {
-                payload[0x1A] |= 0x80;  // Add decimal point after hundreds digit (29.92)
+                // Detect inHg mode: values >= 2000 are inHg (displayed as XX.XX)
+                // hPa range: 870-1085, inHg range: 2570-3200 (representing 25.70-32.00)
+                bool isInHg = pressure.Value >= 2000;
+
+                var encoded = DataFromStringSwappedEfis(4, pressureStr);
+
+                payload[0x19] = encoded[0];  // leftmost digit (thousands)
+                payload[0x1A] = encoded[1];  // hundreds
+                payload[0x1B] = encoded[2];  // tens
+                payload[0x1C] = encoded[3];  // ones (rightmost)
+
+                // Add decimal point for inHg mode (after 2nd digit, not 3rd)
+                // For 2992: display as 29.92 (decimal after hundreds digit)
+                // The decimal point in EFIS encoding is bit 0x80 (not 0x01 like in FCU displays)
+                // This is because DataFromStringSwappedEfis remaps: 0x01 → 0x80
+                if(isInHg) {
+                    payload[0x1A] |= 0x80;  // Add decimal point after hundreds digit (29.92)
+                }
             }
 
             // QNH/QFE indicators at offset 0x1D (29)

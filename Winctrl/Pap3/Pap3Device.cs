@@ -353,14 +353,7 @@ namespace WwDevicesDotNet.Winctrl.Pap3
         public override void Reset()
         {
             base.Reset();
-            // Zeroed values rather than nulls: the PAP3 LCDs turn off on empty fields,
-            // and a freshly reset panel should visibly show it is alive.
-            UpdateDisplay(new Pap3State {
-                Speed = 0,
-                Heading = 0,
-                Altitude = 0,
-                VerticalSpeed = 0,
-            });
+            UpdateDisplay(new Pap3State());  // null fields → all segment displays blank
             UpdateLeds(new Pap3Leds());
         }
 
