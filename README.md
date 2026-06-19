@@ -223,3 +223,9 @@ https://github.com/landre-cerp/WwDevicesDotnet/tree/main/Resources
 Besides the `KeyDown` and `KeyUp` events referenced elsewhere there is also the
 `Disconnected` event, which is raised when the library detects that the device has been
 disconnected.
+
+
+
+## License
+
+[BSD-3-Clause](LICENSE) — Copyright © 2025 Andrew Whewell, Laurent André.
