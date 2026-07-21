@@ -36,6 +36,30 @@ to the USB products IDs, and also that the interval between the MCDU and PFP-7 C
 is the same as the interval between their product IDs.
 
 
+## Line Select Key Bitflags
+
+The MCDU, PFP-4 and PFP-7 all share the same 12 line-select buttons at the same
+flags and packet offsets. Per-device READMEs only list the keys that are unique
+to that device; they refer back here for these.
+
+Offsets are zero-based in decimal from the start of the packet.
+
+| Key              | Flag | Packet Byte Index |
+| ---              | ---  | --- |
+| LineSelectLeft1  | 0x01 | 1 |
+| LineSelectLeft2  | 0x02 | 1 |
+| LineSelectLeft3  | 0x04 | 1 |
+| LineSelectLeft4  | 0x08 | 1 |
+| LineSelectLeft5  | 0x10 | 1 |
+| LineSelectLeft6  | 0x20 | 1 |
+| LineSelectRight1 | 0x40 | 1 |
+| LineSelectRight2 | 0x80 | 1 |
+| LineSelectRight3 | 0x01 | 2 |
+| LineSelectRight4 | 0x02 | 2 |
+| LineSelectRight5 | 0x04 | 2 |
+| LineSelectRight6 | 0x08 | 2 |
+
+
 ## Illumination
 
 Setting the keyboard backlight, display backlight, LED brightness and
@@ -56,6 +80,12 @@ Brightness bytes range from 00 (off) to FF (full-on).
 On / off values are either 0 (off) or 1 (on).
 
 Note that setting the LED brightness to 0 will prevent any LED from displaying.
+
+This 14-byte shape (`02 {ID} 00 00 03 49 {type} {value} ...`) is reused by the
+front-panel families too, just with a different 2-byte device marker in place of
+`{CP}` - see [FCU/EFIS notes](FcuAndEfis/README.md) (`{LE}`/`{FU}`/`{RE}`) and
+[PAP-3 notes](Pap3/README.md) (`0100`) for their device-specific variable-type
+tables. Only the CDU-style (MCDU/PFP-x) type/LED codes are listed below.
 
 
 | Byte 1 | Byte 2                        | Device |
@@ -163,7 +193,7 @@ on other things.
 I have some notes elsewhere on the `{CP}` commands that carry font glyphs to the
 device, I'll write them up later. Those notes can be seen in code form in the
 `extract-font` utility's `WinctrlMcduUsbExtractor` class, which is what's responsible
-for building the packet maps that mcdu-dotnet uses.
+for building the packet maps that this library uses.
 
 
 ### Glyphs

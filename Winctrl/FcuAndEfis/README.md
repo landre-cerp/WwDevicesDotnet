@@ -41,19 +41,10 @@ to an `{ID}` marker. Subsitute in the appropriate two byte hex ID.
 
 ## Backlights and LEDs
 
-These are set via an 02 packet of 14 bytes. The general form of the
-packet is:
-
-```
-00 0102 03 04 05 06 0708 09 0a 0b 0c 0d
----------------------------------------
-02 {ID} 00 00 03 49 {VV} 00 00 00 00 00
-```
-
-Replace `{ID}` with the command prefix for the panel.
-
-Replace `{VV}` with the appropriate two byte variable value.
-
+These are set via the same 14-byte `02 {ID} 00 00 03 49 {VV} ...` packet described
+in the [shared Illumination notes](../README.md#illumination) - replace `{ID}` with
+the command prefix for the panel (`{LE}`/`{FU}`/`{RE}`) and `{VV}` with the two byte
+variable value below.
 
 ### Variable values for all devices
 

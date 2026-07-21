@@ -48,20 +48,13 @@ The PFP-4 supports three independent brightness controls:
 The device sends keyboard input via `0x01` input reports. Offsets are zero-based in decimal 
 from the start of the packet.
 
+The 12 line-select keys (offsets 1-2) are shared with MCDU and PFP-7 - see
+[Line Select Key Bitflags](../README.md#line-select-key-bitflags) in the shared
+Winctrl notes. The keys below are unique to the PFP-4 (PFP-7 is identical except
+where noted in [its README](../Pfp7/README.md#key-bitflags)).
+
 | Key              | Flag | Packet Byte Index |
 | ---              | ---  | --- |
-| LineSelectLeft1  | 0x01 | 1 |
-| LineSelectLeft2  | 0x02 | 1 |
-| LineSelectLeft3  | 0x04 | 1 |
-| LineSelectLeft4  | 0x08 | 1 |
-| LineSelectLeft5  | 0x10 | 1 |
-| LineSelectLeft6  | 0x20 | 1 |
-| LineSelectRight1 | 0x40 | 1 |
-| LineSelectRight2 | 0x80 | 1 |
-| LineSelectRight3 | 0x01 | 2 |
-| LineSelectRight4 | 0x02 | 2 |
-| LineSelectRight5 | 0x04 | 2 |
-| LineSelectRight6 | 0x08 | 2 |
 | InitRef          | 0x10 | 2 |
 | Rte              | 0x20 | 2 |
 | DepArr           | 0x40 | 2 |

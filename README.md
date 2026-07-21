@@ -23,8 +23,8 @@ This library supports the following Winctrl devices:
 
 - **Winctrl FCU** (Airbus A320 Flight Control Unit) - Standalone or with EFIS panels (left, right, or both)
 - **Winctrl PAP-3** (Boeing 737 Primary Autopilot Panel)
-- **Winctrl PDC-3N** (Left and Right configurations)
-- **Winctrl AGP32** (Airbus A320)
+- **Winctrl PDC-3N** (Left and Right configurations) - *display/LED updates are not implemented yet; input (buttons, ambient light) works*
+- **Winctrl AGP32** (Airbus A320) - *capability flags are placeholders pending further protocol investigation*
 
 Each device can be connected via USB and is automatically detected by the library. Use `CduFactory.FindLocalDevices()` to enumerate connected CDU devices or `FrontpanelFactory.FindLocalDevices()` to enumerate connected front panel devices.
 
@@ -108,18 +108,12 @@ using(var frontpanel = FrontpanelFactory.ConnectLocal())
 }
 ```
 
-Available capability properties:
-- `HasSpeedDisplay` - Device has speed/IAS display
-- `HasHeadingDisplay` - Device has heading display
-- `HasAltitudeDisplay` - Device has altitude display
-- `HasVerticalSpeedDisplay` - Device has vertical speed display
-- `CanDisplayBarometricPressure` - Device can display barometric pressure (EFIS panels)
-- `CanDisplayQnhQfe` - Device can display QNH/QFE indicators (EFIS panels)
-- `HasPilotCourseDisplay` - Device has pilot course display (PAP-3)
-- `HasCopilotCourseDisplay` - Device has copilot course display (PAP-3)
-- `SupportsAlphanumericDisplay` - Device can display letters, not just numbers
-- `HasFlightLevelMode` - Device supports flight level display mode
-- `HasMachSpeedMode` - Device supports Mach speed display mode
+The full set of capability properties, and which devices set them, is documented on
+`IFrontpanelCapabilities` itself - see
+https://github.com/landre-cerp/WwDevicesDotnet/blob/main/IFrontpanelCapabilities.cs.
+Note that `Agp32Capabilities` currently reports `false` for every property (it's a
+clock/chrono panel, not an EFIS/autopilot panel, and its capability set hasn't been
+fully investigated yet).
 
 
 
@@ -205,7 +199,7 @@ and set the brightness levels to 0 (overridable).
 ### Fonts
 
 The CDU device supports 1BPP bitmap fonts at varying widths and heights. However
-`mcdu-dotnet` only supports fonts of either 29 or 31 pixels high and between 17 and 23
+this library only supports fonts of either 29 or 31 pixels high and between 17 and 23
 pixels wide.
 
 Fonts are described by an `McduFontFile` object:
