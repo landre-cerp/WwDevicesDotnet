@@ -69,10 +69,10 @@ project file edits.**
    `State`/`Leds` classes in the same file (an alternative to Pap3's separate-file
    style; either is fine).
 
-   > [!WARNING]
-   > Do **not** copy [`Winctrl\Pdc3nm\Pdc3Device.cs`](Winctrl/Pdc3nm/Pdc3Device.cs)
-   > as a reference implementation - its `UpdateDisplay`/`UpdateLeds` are
-   > currently empty stubs, it's mid-development, not a finished pattern.
+   > [!NOTE]
+   > [`Winctrl\Pdc3nm\Pdc3Device.cs`](Winctrl/Pdc3nm/Pdc3Device.cs) isn't a useful
+   > template if your device has a display or LEDs - its `UpdateDisplay`/`UpdateLeds`
+   > are intentionally empty no-ops because the PDC-3N hardware has neither.
 
 3. **Wire up the factory.** Add a `case Device.Winctrl<Name>:` branch:
    - CDU-style: [`CduFactory.ConnectLocal()`](CduFactory.cs) (around line 126).

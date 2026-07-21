@@ -7,14 +7,17 @@
 
 ## Status
 
-> [!WARNING]
-> **Display and LED output are not implemented yet.** `Pdc3Device.UpdateDisplay()`
-> and `Pdc3Device.UpdateLeds()` are both empty no-op methods, and there are no
-> `Pdc3State`/`Pdc3Leds` classes. Reading buttons/controls and the ambient light
-> sensors, and setting panel backlight brightness, all work. Do not use
-> `Pdc3Device.cs` as a copy-paste template for a new device - see
+The PDC-3N has no display or LEDs - it's a control panel only (buttons, mode
+selectors and rotary/range knobs, see Controls below), so `Pdc3Device.UpdateDisplay()`
+and `Pdc3Device.UpdateLeds()` are intentionally empty no-ops and there are no
+`Pdc3State`/`Pdc3Leds` classes. Reading buttons/controls and the ambient light
+sensors, and setting panel backlight brightness, all work.
+
+> [!NOTE]
+> Because it has no display/LEDs, `Pdc3Device.cs` isn't a useful copy-paste
+> template for a device that does - see
 > [`../Agp32/Agp32Device.cs`](../Agp32/Agp32Device.cs) or
-> [`../Pfp7/Pfp7Device.cs`](../Pfp7/Pfp7Device.cs) instead.
+> [`../Pfp7/Pfp7Device.cs`](../Pfp7/Pfp7Device.cs) for that pattern instead.
 
 ## USB Vendor and Product IDs
 
