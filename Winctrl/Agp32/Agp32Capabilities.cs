@@ -5,7 +5,9 @@ namespace WwDevicesDotNet.Winctrl.Agp32
 {
     /// <summary>
     /// Describes the capabilities of a Winctrl 32 AGP Metal panel.
-    /// TODO: update once capabilities are known from the Wireshark trace.
+    /// The AGP32 is a clock/chrono panel, not an EFIS/autopilot panel - it has
+    /// none of the autopilot-style displays below, but does have clock,
+    /// chronometer and elapsed-time digital displays (see <see cref="Agp32Device"/>).
     /// </summary>
     public class Agp32Capabilities : IFrontpanelCapabilities
     {
@@ -41,5 +43,14 @@ namespace WwDevicesDotNet.Winctrl.Agp32
 
         /// <inheritdoc/>
         public bool HasMachSpeedMode => false;
+
+        /// <inheritdoc/>
+        public bool HasClockDisplay => true;
+
+        /// <inheritdoc/>
+        public bool HasChronometerDisplay => true;
+
+        /// <inheritdoc/>
+        public bool HasElapsedTimeDisplay => true;
     }
 }

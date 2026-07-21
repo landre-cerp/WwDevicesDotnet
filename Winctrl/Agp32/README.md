@@ -9,13 +9,14 @@ The AGP32 is an Airbus A320-style clock/chrono panel (CHR, clock and ET digital
 displays plus gear/brake/terrain indicator LEDs) - it is not an EFIS or autopilot
 panel, so it has no speed/heading/altitude/course displays.
 
-## Status
+## Capabilities
 
-> [!WARNING]
-> `Agp32Capabilities` currently reports `false` for every capability property
-> (see the `TODO` on the class itself) pending further protocol investigation -
-> the capability flags described in the root [README](../../README.md#checking-device-capabilities)
-> don't apply to this panel; display/LED/button control below already works.
+`Agp32Capabilities` reports `false` for every autopilot/EFIS-oriented flag
+(speed, heading, altitude, baro, course, flight level, Mach) - the AGP32 has
+none of those displays. It reports `true` for `HasClockDisplay`,
+`HasChronometerDisplay` and `HasElapsedTimeDisplay`, matching the panel's three
+digital fields (Clock, CHR, ET). `SupportsAlphanumericDisplay` is `false`
+since all three fields are digits-only (see `Agp32Device.PutDigit`).
 
 ## USB Vendor and Product IDs
 
@@ -84,4 +85,4 @@ The implementation lives in:
   also defines `Agp32State`/`Agp32Leds` in the same file
 - `Control.cs` - Button/control enumeration
 - `ControlMap.cs` - Input report mapping
-- `Agp32Capabilities.cs` - Capability flags (currently all `false`, see Status above)
+- `Agp32Capabilities.cs` - Capability flags (see Capabilities above)

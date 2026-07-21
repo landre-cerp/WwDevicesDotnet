@@ -56,9 +56,15 @@ project file edits.**
    - `ControlMap.cs` - `InputReport01FlagAndOffset(Control)`.
    - `<Name>Capabilities.cs` - implements `IFrontpanelCapabilities` (see
      [`IFrontpanelCapabilities.cs`](IFrontpanelCapabilities.cs) for what each
-     flag means). Set flags to `false` rather than guessing if the protocol
-     hasn't been fully reverse-engineered yet - don't leave it undocumented
-     (see the "Documentation conventions" note on `Agp32Capabilities` below).
+     flag means). If none of the existing flags describe what your device
+     actually displays, add new ones to the interface (and implement `false`
+     in every other implementer) rather than forcing a mismatched flag to
+     `true` or leaving a real capability unmodeled - see `HasClockDisplay`/
+     `HasChronometerDisplay`/`HasElapsedTimeDisplay`, added for the AGP32's
+     clock/chrono/elapsed-time displays, which none of the autopilot-oriented
+     flags covered. If the protocol genuinely hasn't been reverse-engineered
+     yet, set flags to `false` and say so in the device's README (see the
+     "Documentation conventions" note below).
    - `<Name>State.cs` / `<Name>Leds.cs` (optional) implementing `IFrontpanelState`/
      `IFrontpanelLeds`, if the device has a display or LEDs beyond what the base
      class covers. Devices downcast the interface parameter inside
@@ -95,11 +101,10 @@ To avoid re-introducing duplication that's been cleaned up in this repo:
   [`Winctrl\Mcdu\README.md`](Winctrl/Mcdu/README.md) reference the shared
   [Line Select Key Bitflags](Winctrl/README.md#line-select-key-bitflags) table
   instead of repeating it.
-- If a device's capabilities or protocol are genuinely unknown or incomplete
-  (not yet reverse-engineered, or a stub implementation), say so explicitly in
-  its README rather than leaving it silent - see the Status notes in
-  [`Winctrl\Pdc3nm\README.md`](Winctrl/Pdc3nm/README.md) and
-  [`Winctrl\Agp32\README.md`](Winctrl/Agp32/README.md).
+- If a device's capabilities or protocol are genuinely unknown, incomplete, or
+  the hardware simply lacks a feature other similar devices have (e.g. no
+  display/LEDs), say so explicitly in its README rather than leaving it silent
+  - see the Status note in [`Winctrl\Pdc3nm\README.md`](Winctrl/Pdc3nm/README.md).
 
 ## Building and CI
 

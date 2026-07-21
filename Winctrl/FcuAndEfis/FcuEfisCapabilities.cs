@@ -49,5 +49,14 @@ namespace WwDevicesDotNet.Winctrl.FcuAndEfis
 
         /// <inheritdoc/>
         public bool HasMachSpeedMode => true;
+
+        /// <inheritdoc/>
+        public bool HasClockDisplay => false;
+
+        /// <inheritdoc/>
+        public bool HasChronometerDisplay => false;
+
+        /// <inheritdoc/>
+        public bool HasElapsedTimeDisplay => false;
     }
 }

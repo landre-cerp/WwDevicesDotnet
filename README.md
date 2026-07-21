@@ -24,7 +24,7 @@ This library supports the following Winctrl devices:
 - **Winctrl FCU** (Airbus A320 Flight Control Unit) - Standalone or with EFIS panels (left, right, or both)
 - **Winctrl PAP-3** (Boeing 737 Primary Autopilot Panel)
 - **Winctrl PDC-3N** (Left and Right configurations) - *control panel only, no display or LEDs on this device; buttons and ambient light sensors are supported*
-- **Winctrl AGP32** (Airbus A320) - *capability flags are placeholders pending further protocol investigation*
+- **Winctrl AGP32** (Airbus A320) - *clock/chrono panel, not an EFIS/autopilot panel: no speed/heading/altitude/course displays, but has clock, chronometer and elapsed-time displays*
 
 Each device can be connected via USB and is automatically detected by the library. Use `CduFactory.FindLocalDevices()` to enumerate connected CDU devices or `FrontpanelFactory.FindLocalDevices()` to enumerate connected front panel devices.
 
@@ -111,9 +111,10 @@ using(var frontpanel = FrontpanelFactory.ConnectLocal())
 The full set of capability properties, and which devices set them, is documented on
 `IFrontpanelCapabilities` itself - see
 https://github.com/landre-cerp/WwDevicesDotnet/blob/main/IFrontpanelCapabilities.cs.
-Note that `Agp32Capabilities` currently reports `false` for every property (it's a
-clock/chrono panel, not an EFIS/autopilot panel, and its capability set hasn't been
-fully investigated yet).
+Note that `Agp32Capabilities` reports `false` for every autopilot/EFIS-style property
+(it's a clock/chrono panel, not an EFIS/autopilot panel) but `true` for
+`HasClockDisplay`/`HasChronometerDisplay`/`HasElapsedTimeDisplay`, which describe
+what it actually displays.
 
 
 
