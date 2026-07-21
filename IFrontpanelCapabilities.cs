@@ -63,5 +63,20 @@ namespace WwDevicesDotNet
         /// Gets whether the device has Mach speed display mode.
         /// </summary>
         bool HasMachSpeedMode { get; }
+
+        /// <summary>
+        /// Gets whether the device has a clock (time of day) display.
+        /// </summary>
+        bool HasClockDisplay { get; }
+
+        /// <summary>
+        /// Gets whether the device has a chronometer (stopwatch) display.
+        /// </summary>
+        bool HasChronometerDisplay { get; }
+
+        /// <summary>
+        /// Gets whether the device has an elapsed time display.
+        /// </summary>
+        bool HasElapsedTimeDisplay { get; }
     }
 }

@@ -33,18 +33,10 @@ The PAP-3 uses different prefixes for the display payload and for LED / brightne
 
 ## Backlights, Brightness and LEDs
 
-Backlights and LEDs are set via a `0x02` packet of 14 bytes.
-General form:
-
-```
-00 0102 03 04 05 06 0708 09 0a 0b 0c 0d
----------------------------------------
-02 01 00 00 00 03 49 {TT} {VV} 00 00 00 00 00
-```
-
-Where:
-- `{TT}` is the variable type
-- `{VV}` is the desired value
+Backlights and LEDs are set via the same 14-byte packet shape described in the
+[shared Illumination notes](../README.md#illumination) (`02 0100 03 49 {TT} {VV} ...`,
+using the PAP-3 LEDs/Brightness prefix `0100` from the Command Prefixes table above),
+where `{TT}` is the variable type and `{VV}` is the desired value.
 
 ### Brightness variable types
 
@@ -195,11 +187,6 @@ The mapping between bits and controls is defined in `ControlMap.InputReport01Fla
 - Light sensor value is at offset 0x14
 
 (See `ControlMap.cs` for the authoritative table.)
-
-
-## Samples
-
-- `library/samples/pap3-leds` demonstrates LEDs, brightness, and display test patterns.
 
 
 ## TODO

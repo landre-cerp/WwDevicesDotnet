@@ -22,12 +22,12 @@ namespace WwDevicesDotNet
         public int UsbProductId { get; }
 
         /// <summary>
-        /// Gets the MCDU.NET device that corresponds to this vendor and product ID.
+        /// Gets the device that corresponds to this vendor and product ID.
         /// </summary>
         public Device Device { get; }
 
         /// <summary>
-        /// Gets the MCDU.NET device position (pilot, co-pilot etc.) that corresponds to
+        /// Gets the device position (pilot, co-pilot etc.) that corresponds to
         /// this vendor and product ID.
         /// </summary>
         public DeviceUser DeviceUser { get; }

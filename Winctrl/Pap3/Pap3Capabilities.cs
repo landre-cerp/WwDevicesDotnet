@@ -40,5 +40,14 @@ namespace WwDevicesDotNet.Winctrl.Pap3
 
         /// <inheritdoc/>
         public bool HasMachSpeedMode => false;
+
+        /// <inheritdoc/>
+        public bool HasClockDisplay => false;
+
+        /// <inheritdoc/>
+        public bool HasChronometerDisplay => false;
+
+        /// <inheritdoc/>
+        public bool HasElapsedTimeDisplay => false;
     }
 }

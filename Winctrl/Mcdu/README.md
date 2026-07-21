@@ -19,22 +19,14 @@ The command prefix is 0x32 0xbb.
 
 ## Key Bitflags
 
+The 12 line-select keys (offsets 1-2) are shared with PFP-4 and PFP-7 - see
+[Line Select Key Bitflags](../README.md#line-select-key-bitflags) in the shared
+Winctrl notes. The keys below are unique to the MCDU.
+
 Offsets are zero-based in decimal from the start of the packet.
 
 | Key              | Flag | Packet Byte Index |
 | ---              | ---  | --- |
-| LineSelectLeft1  | 0x01 | 1 |
-| LineSelectLeft2  | 0x02 | 1 |
-| LineSelectLeft3  | 0x04 | 1 |
-| LineSelectLeft4  | 0x08 | 1 |
-| LineSelectLeft5  | 0x10 | 1 |
-| LineSelectLeft6  | 0x20 | 1 |
-| LineSelectRight1 | 0x40 | 1 |
-| LineSelectRight2 | 0x80 | 1 |
-| LineSelectRight3 | 0x01 | 2 |
-| LineSelectRight4 | 0x02 | 2 |
-| LineSelectRight5 | 0x04 | 2 |
-| LineSelectRight6 | 0x08 | 2 |
 | Dir              | 0x10 | 2 |
 | Prog             | 0x20 | 2 |
 | Perf             | 0x40 | 2 |
@@ -98,6 +90,13 @@ Offsets are zero-based in decimal from the start of the packet.
 | Ovfy             | 0x01 | 10 |
 | Clr              | 0x02 | 10 |
 
+(See `KeyboardMap.cs` for the authoritative mapping.)
+
+## Implementation
+
+The implementation lives in:
+- `McduDevice.cs` - Main device driver (inherits from `CommonWinctrlPanel`)
+- `KeyboardMap.cs` - Input report mapping
 
 # X and Y Offsets
 
