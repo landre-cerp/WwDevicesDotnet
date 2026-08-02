@@ -42,6 +42,7 @@ namespace WwDevicesDotNet.Winctrl
             int currentDisplayBrightnessPercent,
             int currentDisplayXOffset,
             int currentDisplayYOffset,
+            int columns,
             bool skipDuplicateCheck,
             bool suppressUpdatingDeviceCallback = false
         )
@@ -53,7 +54,8 @@ namespace WwDevicesDotNet.Winctrl
                 if(skipDuplicateCheck || hasChanged) {
                     clearScreenAction();
 
-                    var xOffset = 0x24 + currentDisplayXOffset + XOffsetForGlyphWidth(_DisplayFont.PixelWidth);
+                    var xOffset = currentDisplayXOffset
+                        + Metrics.TextOriginX(_DisplayFont.PixelWidth, columns);
                     var yOffset = 0x14 + currentDisplayYOffset + YOffsetForGlyphHeight(_DisplayFont.PixelHeight);
 
                     if(UpdatingDeviceCallback != null && !suppressUpdatingDeviceCallback) {
@@ -92,12 +94,6 @@ namespace WwDevicesDotNet.Winctrl
             });
 
             return fontUploaded;
-        }
-
-        private static int XOffsetForGlyphWidth(int glyphWidth)
-        {
-            var excess = Metrics.DisplayWidthPixels - (glyphWidth * Metrics.Columns);
-            return excess / 2;
         }
 
         private static int YOffsetForGlyphHeight(int glyphHeight)

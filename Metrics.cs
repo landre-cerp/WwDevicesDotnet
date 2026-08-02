@@ -29,5 +29,30 @@ namespace WwDevicesDotNet
         /// Display height in pixels.
         /// </summary>
         public const int DisplayHeightPixels = (17 * 2) + (29 * Lines);
+
+        /// <summary>
+        /// The x of the left edge of the visible area, measured on PFP-3N, PFP-4, PFP-7
+        /// and MCDU. All four share it; only the vertical aperture differs.
+        /// </summary>
+        public const int DisplayLeftPixel = 0x24;
+
+        /// <summary>
+        /// Where the text of a grid of <paramref name="columns"/> columns starts if it is
+        /// to sit centred in the visible area, given the step the device advances by
+        /// between characters.
+        /// </summary>
+        /// <remarks>
+        /// The default grid lands on 0x34: 24 columns of 23px leave 32px of the 584px
+        /// aperture spare, half of it either side. Wider grids have to start further
+        /// left, and 25 columns of 23px start 12px inside the old margin - drawn from
+        /// 0x34 they would run past the right edge instead.
+        /// </remarks>
+        /// <param name="glyphPixelWidth"></param>
+        /// <param name="columns"></param>
+        public static int TextOriginX(int glyphPixelWidth, int columns)
+        {
+            var spare = DisplayWidthPixels - (glyphPixelWidth * columns);
+            return DisplayLeftPixel + (spare > 0 ? spare / 2 : 0);
+        }
     }
 }
