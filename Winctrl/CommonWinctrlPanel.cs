@@ -415,12 +415,12 @@ namespace WwDevicesDotNet.Winctrl
         }
 
         /// <summary>
-        /// The step the device advances by between characters, used to place the grid
-        /// before any font has been sent. The fonts this library ships all advance by
-        /// this much; <see cref="GlyphPixelWidth"/> reports what a loaded one actually
-        /// does.
+        /// The step the device advances by between characters. Once a font has been sent
+        /// this is what it actually advances by, so that the grid origin declared here and
+        /// the one the font upload carries cannot disagree; before then it is the step the
+        /// fonts this library ships all use.
         /// </summary>
-        protected virtual int CellAdvancePixels => 23;
+        protected virtual int CellAdvancePixels => GlyphPixelWidth > 0 ? GlyphPixelWidth : 23;
 
         /// <summary>
         /// The grid the device is told to lay screen data out on. Sent during
@@ -570,6 +570,15 @@ namespace WwDevicesDotNet.Winctrl
                     suppressUpdatingDeviceCallback: FontChanging == null
                 );
                 if(fontUploaded) {
+                    // The packet map carries a setScreenInfo of its own, and the grid in it is
+                    // part of the capture: the x and y are substituted but the 14 rows and 24
+                    // columns are literal bytes. Uploading a font therefore puts the device
+                    // back on a 24 column grid, and the cell stream then wraps a column early -
+                    // each row pushing its last character onto the next one. Harmless while
+                    // every panel ran 24; not once one of them does not. Re-declare the grid
+                    // before the refresh below paints on it.
+                    InitialiseFormatTable();
+
                     // As of time of writing the packet map includes a pile of {CP}...1901 commands to
                     // set the colours to Winctrl's defaults. If I remove this then the font goes weird.
                     // So for now I'm just resending the colour palette to override the colours that the
