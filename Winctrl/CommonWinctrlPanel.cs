@@ -237,23 +237,30 @@ namespace WwDevicesDotNet.Winctrl
         }
 
         /// <inheritdoc/>
-        public void SetScreenSize(int lines, int columns)
-        {
-            if(lines == Screen.LineCount && columns == Screen.ColumnCount) {
-                return;
-            }
+public void SetScreenSize(int lines, int columns)
+{
+    if(lines == Screen.LineCount && columns == Screen.ColumnCount) {
+        return;
+    }
 
+    var writer = _UsbWriter;
+    if(writer != null) {
+        writer.LockForOutput(() => {
             Screen = new Screen(lines, columns);
             _EmptyScreen = new Screen(lines, columns);
             Output = new Compositor(Screen);
 
-            if(_UsbWriter != null) {
-                // The grid origin moves with the column count, so cells the old grid
-                // painted can sit where the new one has nothing to draw over them.
-                ClearFramebuffer();
-                InitialiseFormatTable();
-            }
-        }
+            // The grid origin moves with the column count, so cells the old grid
+            // painted can sit where the new one has nothing to draw over them.
+            ClearFramebuffer();
+            InitialiseFormatTable();
+        });
+    } else {
+        Screen = new Screen(lines, columns);
+        _EmptyScreen = new Screen(lines, columns);
+        Output = new Compositor(Screen);
+    }
+}
 
         /// <inheritdoc/>
         public void Dispose()
