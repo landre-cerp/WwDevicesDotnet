@@ -41,7 +41,15 @@ namespace WwDevicesDotNet.Winctrl
         )
         {
             _UsbWriter.LockForOutput(() => {
-                if(_DisplayBuffer == null) {
+                // The buffer is what tells a repeat send from a real change, so it is kept
+                // between sends - but the panel can be moved to another grid while it runs,
+                // and a buffer of the old size refuses a screen of the new one. Rebuilding it
+                // starts the comparison from blank, which is what a resized screen wants
+                // anyway: every cell has to be sent again.
+                if(_DisplayBuffer == null
+                    || _DisplayBuffer.CountRows != screen.Rows.Length
+                    || _DisplayBuffer.CountCells != screen.Rows[0].Cells.Length
+                ) {
                     _DisplayBuffer = new DisplayBuffer(screen.Rows.Length, screen.Rows[0].Cells.Length);
                 }
                 var hasChanged = _DisplayBuffer.CopyFrom(screen);
