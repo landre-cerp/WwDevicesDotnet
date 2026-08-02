@@ -19,6 +19,16 @@ namespace WwDevicesDotNet.Winctrl
 
         public Action<FontChangingEventArgs> UpdatingDeviceCallback { get; set; }
 
+        /// <summary>
+        /// The pixel width of the glyphs last sent to the device, or 0 if none have been.
+        /// </summary>
+        public int GlyphPixelWidth => _DisplayFont.PixelWidth;
+
+        /// <summary>
+        /// The pixel height of the glyphs last sent to the device, or 0 if none have been.
+        /// </summary>
+        public int GlyphPixelHeight => _DisplayFont.PixelHeight;
+
         public FontWriter(UsbWriter usbWriter)
         {
             _UsbWriter = usbWriter;

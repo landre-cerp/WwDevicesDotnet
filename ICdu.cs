@@ -75,6 +75,22 @@ namespace WwDevicesDotNet
         int YOffset { get; set; }
 
         /// <summary>
+        /// The pixel width of the glyphs in the font last passed to <see cref="UseFont"/>,
+        /// or 0 if no font has been sent. This is <see cref="McduFontFile.GlyphFullWidth"/>
+        /// or <see cref="McduFontFile.GlyphWidth"/> depending on the <c>useFullWidth</c>
+        /// argument, and it is the step the device advances by between characters - so it
+        /// is what a caller needs in order to work out how many columns will fit across
+        /// <see cref="Metrics.DisplayWidthPixels"/>.
+        /// </summary>
+        int GlyphPixelWidth { get; }
+
+        /// <summary>
+        /// The pixel height of the glyphs in the font last passed to <see cref="UseFont"/>,
+        /// or 0 if no font has been sent.
+        /// </summary>
+        int GlyphPixelHeight { get; }
+
+        /// <summary>
         /// True if the device has ambient light sensors.
         /// </summary>
         bool HasAmbientLightSensor { get; }

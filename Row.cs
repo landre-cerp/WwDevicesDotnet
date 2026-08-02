@@ -11,10 +11,24 @@ namespace WwDevicesDotNet
     /// </summary>
     public class Row
     {
-        public Cell[] Cells { get; } = new Cell[Metrics.Columns];
+        public Cell[] Cells { get; }
 
-        public Row()
+        public Row() : this(Metrics.Columns)
         {
+        }
+
+        /// <summary>
+        /// Creates a row of an arbitrary width. Panels take their column count from the
+        /// screen they are sent, so this is what lets a device run a grid that is not
+        /// <see cref="Metrics.Columns"/> wide.
+        /// </summary>
+        /// <param name="columns"></param>
+        public Row(int columns)
+        {
+            if(columns < 1) {
+                throw new ArgumentOutOfRangeException(nameof(columns), columns, "Rows need at least one column");
+            }
+            Cells = new Cell[columns];
             for(var idx = 0;idx < Cells.Length;++idx) {
                 Cells[idx] = new Cell();
             }

@@ -209,7 +209,7 @@ namespace WwDevicesDotNet
 
         public Compositor NewLine() => Newline();
 
-        public Compositor ScrollUp(int startRow = 0, int endRow = Metrics.Lines - 1)
+        public Compositor ScrollUp(int startRow = 0, int endRow = -1)
         {
             _Screen.ScrollRows(startRow, endRow);
             return this;
@@ -398,7 +398,7 @@ namespace WwDevicesDotNet
             bool clearLines = false
         )
         {
-            return Lines(text?.WrapAtWhitespace(Metrics.Columns), 0, maxLines, clearLines);
+            return Lines(text?.WrapAtWhitespace(_Screen.ColumnCount), 0, maxLines, clearLines);
         }
 
         public Compositor Lines(
