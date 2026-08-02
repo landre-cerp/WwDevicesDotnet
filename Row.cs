@@ -50,13 +50,22 @@ namespace WwDevicesDotNet
             }
         }
 
+        /// <summary>
+        /// Copies this row into another, which need not be the same width. Cells beyond
+        /// the overlap are cleared rather than left holding whatever was there before.
+        /// </summary>
+        /// <param name="other"></param>
         public void CopyTo(Row other)
         {
             if(other == null) {
                 throw new ArgumentNullException(nameof(other));
             }
-            for(var idx = 0;idx < Cells.Length;++idx) {
+            var shared = Math.Min(Cells.Length, other.Cells.Length);
+            for(var idx = 0;idx < shared;++idx) {
                 other.Cells[idx].CopyFrom(Cells[idx]);
+            }
+            for(var idx = shared;idx < other.Cells.Length;++idx) {
+                other.Cells[idx].Clear();
             }
         }
 

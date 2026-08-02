@@ -177,8 +177,12 @@ namespace WwDevicesDotNet
             if(other == null) {
                 throw new ArgumentNullException(nameof(other));
             }
-            for(var idx = 0;idx < Rows.Length;++idx) {
+            var shared = Math.Min(Rows.Length, other.Rows.Length);
+            for(var idx = 0;idx < shared;++idx) {
                 Rows[idx].CopyFrom(other.Rows[idx]);
+            }
+            for(var idx = shared;idx < Rows.Length;++idx) {
+                Rows[idx].Clear();
             }
             RightToLeft = other.RightToLeft;
             Colour = other.Colour;
