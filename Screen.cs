@@ -187,8 +187,8 @@ namespace WwDevicesDotNet
             RightToLeft = other.RightToLeft;
             Colour = other.Colour;
             BackgroundColour = other.BackgroundColour;
-            Column = other.Column;
-            Line = other.Line;
+            Column = Math.Min(other.Column, ColumnCount - 1);
+            Line = Math.Min(other.Line, LineCount - 1);
             Small = other.Small;
         }
 
