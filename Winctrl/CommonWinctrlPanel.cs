@@ -31,13 +31,16 @@ namespace WwDevicesDotNet.Winctrl
         protected abstract Func<Key, (int Flag, int Offset)> KeyToFlagOffsetCallback { get; }
 
         /// <summary>
-        /// The character grid this panel runs. Override to drive a panel with a grid
-        /// other than the default - the device is told the size during initialisation
-        /// and lays screen data out accordingly.
+        /// The character grid this panel starts on. Override to give a panel a different
+        /// default - the device is told the size during initialisation and lays screen
+        /// data out accordingly, and <see cref="SetScreenSize"/> can change it later.
         /// </summary>
         protected virtual (int Lines, int Columns) ScreenSize => (Metrics.Lines, Metrics.Columns);
 
-        protected readonly Screen _EmptyScreen;
+        /// <inheritdoc/>
+        public (int Lines, int Columns) DefaultScreenSize => ScreenSize;
+
+        protected Screen _EmptyScreen;
         protected HidDevice _HidDevice;
         protected HidStream _HidStream;
         protected UsbWriter _UsbWriter;
@@ -53,7 +56,7 @@ namespace WwDevicesDotNet.Winctrl
         public DeviceIdentifier DeviceId { get; }
 
         /// <inheritdoc/>
-        public Screen Screen { get; }
+        public Screen Screen { get; private set; }
 
         /// <inheritdoc/>
         public Leds Leds { get; }
@@ -74,7 +77,7 @@ namespace WwDevicesDotNet.Winctrl
         public int YOffset { get; set; }
 
         /// <inheritdoc/>
-        public Compositor Output { get; }
+        public Compositor Output { get; private set; }
 
         private int _DisplayBrightnessPercent = 100;
         /// <inheritdoc/>
@@ -232,6 +235,32 @@ namespace WwDevicesDotNet.Winctrl
                 .Where(key => IsKeySupported(key))
                 .ToArray();
         }
+
+        /// <inheritdoc/>
+public void SetScreenSize(int lines, int columns)
+{
+    if(lines == Screen.LineCount && columns == Screen.ColumnCount) {
+        return;
+    }
+
+    var writer = _UsbWriter;
+    if(writer != null) {
+        writer.LockForOutput(() => {
+            Screen = new Screen(lines, columns);
+            _EmptyScreen = new Screen(lines, columns);
+            Output = new Compositor(Screen);
+
+            // The grid origin moves with the column count, so cells the old grid
+            // painted can sit where the new one has nothing to draw over them.
+            ClearFramebuffer();
+            InitialiseFormatTable();
+        });
+    } else {
+        Screen = new Screen(lines, columns);
+        _EmptyScreen = new Screen(lines, columns);
+        Output = new Compositor(Screen);
+    }
+}
 
         /// <inheritdoc/>
         public void Dispose()
@@ -393,11 +422,20 @@ namespace WwDevicesDotNet.Winctrl
         }
 
         /// <summary>
+        /// The step the device advances by between characters. Once a font has been sent
+        /// this is what it actually advances by, so that the grid origin declared here and
+        /// the one the font upload carries cannot disagree; before then it is the step the
+        /// fonts this library ships all use.
+        /// </summary>
+        protected virtual int CellAdvancePixels => GlyphPixelWidth > 0 ? GlyphPixelWidth : 23;
+
+        /// <summary>
         /// The grid the device is told to lay screen data out on. Sent during
         /// initialisation, and taken from <see cref="Screen"/> so that a panel driven
         /// with a non-default screen size gets the matching declaration.
         /// </summary>
-        protected virtual (int X, int Y) ScreenOrigin => (0x34, 0x18);
+        protected virtual (int X, int Y) ScreenOrigin =>
+            (Metrics.TextOriginX(CellAdvancePixels, Screen.ColumnCount), 0x18);
 
         /// <inheritdoc/>
         public void ClearFramebuffer()
@@ -534,10 +572,20 @@ namespace WwDevicesDotNet.Winctrl
                     DisplayBrightnessPercent,
                     XOffset,
                     YOffset,
+                    Screen.ColumnCount,
                     skipDuplicateCheck,
                     suppressUpdatingDeviceCallback: FontChanging == null
                 );
                 if(fontUploaded) {
+                    // The packet map carries a setScreenInfo of its own, and the grid in it is
+                    // part of the capture: the x and y are substituted but the 14 rows and 24
+                    // columns are literal bytes. Uploading a font therefore puts the device
+                    // back on a 24 column grid, and the cell stream then wraps a column early -
+                    // each row pushing its last character onto the next one. Harmless while
+                    // every panel ran 24; not once one of them does not. Re-declare the grid
+                    // before the refresh below paints on it.
+                    InitialiseFormatTable();
+
                     // As of time of writing the packet map includes a pile of {CP}...1901 commands to
                     // set the colours to Winctrl's defaults. If I remove this then the font goes weird.
                     // So for now I'm just resending the colour palette to override the colours that the

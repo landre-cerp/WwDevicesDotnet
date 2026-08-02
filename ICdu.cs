@@ -24,6 +24,27 @@ namespace WwDevicesDotNet
         Screen Screen { get; }
 
         /// <summary>
+        /// Rebuilds <see cref="Screen"/> and <see cref="Output"/> at a new grid size and
+        /// re-declares that grid to the device. A panel connects before the host knows
+        /// what it will be asked to show, so the size a device class declares is a
+        /// default rather than a fixed property of the hardware.
+        /// </summary>
+        /// <remarks>
+        /// The grid origin moves with the column count, and the font upload carries an
+        /// origin of its own, so call this before <see cref="UseFont"/>. Whatever the
+        /// screen held is lost.
+        /// </remarks>
+        /// <param name="lines"></param>
+        /// <param name="columns"></param>
+        void SetScreenSize(int lines, int columns);
+
+        /// <summary>
+        /// The grid this device runs unless it is asked for another one. A host that
+        /// moved a panel off its default has this to put it back to.
+        /// </summary>
+        (int Lines, int Columns) DefaultScreenSize { get; }
+
+        /// <summary>
         /// The CDU LED light buffer. Changes to the LED lights are not sent to the device
         /// until <see cref="RefreshLeds"/> is called.
         /// </summary>
