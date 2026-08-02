@@ -91,6 +91,16 @@ namespace WwDevicesDotNet
         int GlyphPixelHeight { get; }
 
         /// <summary>
+        /// The tallest glyph height that still lets a full screen fit inside the
+        /// panel's visible area. The bezels differ: the MCDU's aperture is 6mm
+        /// shorter than the PFP family's, so a font that fits one overflows the
+        /// other. Pick the font to upload with this rather than assuming a height,
+        /// because the choice belongs to the panel and not to what is being drawn
+        /// on it.
+        /// </summary>
+        int MaxGlyphHeight { get; }
+
+        /// <summary>
         /// True if the device has ambient light sensors.
         /// </summary>
         bool HasAmbientLightSensor { get; }
@@ -252,6 +262,14 @@ namespace WwDevicesDotNet
         /// "skip duplicate" checks.
         /// </param>
         void UseFont(McduFontFile fontFileContent, bool useFullWidth, bool skipDuplicateCheck = true);
+
+        /// <summary>
+        /// Paints the whole framebuffer black, including the margins outside the
+        /// character grid. Screen refreshes only repaint the grid, so anything drawn
+        /// beyond it - or left over from a session that declared a different grid -
+        /// survives until this is called.
+        /// </summary>
+        void ClearFramebuffer();
 
         /// <summary>
         /// Resets the display and turns everything off.

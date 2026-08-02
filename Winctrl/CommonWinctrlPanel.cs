@@ -127,6 +127,9 @@ namespace WwDevicesDotNet.Winctrl
         public int GlyphPixelHeight => _FontWriter?.GlyphPixelHeight ?? 0;
 
         /// <inheritdoc/>
+        public virtual int MaxGlyphHeight => 32;
+
+        /// <inheritdoc/>
         public bool HasAmbientLightSensor => true;
 
         /// <inheritdoc/>
@@ -320,7 +323,18 @@ namespace WwDevicesDotNet.Winctrl
         private const int StructuredFunctionSetCompositeIndexBytes = 0x11A;
         private const int StructuredFunctionBuildFormatTable = 0x11C;
 
+        private const int StructuredFunctionRefreshLcd = 0x103;
+        private const int StructuredFunctionFillRect = 0x110;
+        private const int StructuredFunctionSetTextColour = 0x112;
+        private const int StructuredFunctionSetBackColour = 0x113;
+
         private static readonly byte[] _StructuredTimestamp = { 0x5F, 0x63, 0x31, 0x00 };
+
+        /// <summary>
+        /// The addressable framebuffer behind the character grid. Screen refreshes only
+        /// repaint the grid, so anything outside it has to be cleared separately.
+        /// </summary>
+        protected virtual (int Width, int Height) FramebufferSize => (640, 480);
 
         private static readonly string[] _FeatureDeclarations = {
             "0100050000000200000000000000", "0100060000000300000000000000",
@@ -384,6 +398,26 @@ namespace WwDevicesDotNet.Winctrl
         /// with a non-default screen size gets the matching declaration.
         /// </summary>
         protected virtual (int X, int Y) ScreenOrigin => (0x34, 0x18);
+
+        /// <inheritdoc/>
+        public void ClearFramebuffer()
+        {
+            var black = new byte[] { 0xFF, 0x00, 0x00, 0x00 };
+            var size = FramebufferSize;
+            var rectangle = new List<byte>();
+            rectangle.AddRange(BitConverter.GetBytes((ushort)0));
+            rectangle.AddRange(BitConverter.GetBytes((ushort)0));
+            rectangle.AddRange(BitConverter.GetBytes((ushort)size.Width));
+            rectangle.AddRange(BitConverter.GetBytes((ushort)size.Height));
+
+            var stream = new List<byte>();
+            stream.AddRange(StructuredCommand(StructuredFunctionSetTextColour, black));
+            stream.AddRange(StructuredCommand(StructuredFunctionSetBackColour, black));
+            stream.AddRange(StructuredCommand(StructuredFunctionFillRect, rectangle.ToArray()));
+            stream.AddRange(StructuredCommand(StructuredFunctionRefreshLcd));
+
+            _UsbWriter?.LockForOutput(() => SendStructuredCommands(stream));
+        }
 
         protected void InitialiseFormatTable()
         {
@@ -542,6 +576,7 @@ namespace WwDevicesDotNet.Winctrl
             int backlightBrightnessPercent = 0
         )
         {
+            ClearFramebuffer();
             Screen.Clear();
             Leds.TurnAllOn(false);
             _IlluminationWriter?.SendLedBrightnessPercent(ledBrightnessPercent);
@@ -554,6 +589,8 @@ namespace WwDevicesDotNet.Winctrl
         /// <inheritdoc/>
         public void Reset()
         {
+            InitialiseFormatTable();
+            ClearFramebuffer();
             Screen.Clear();
             Leds.TurnAllOn(false);
             DisplayBrightnessPercent = 100;

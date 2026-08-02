@@ -14,6 +14,14 @@ namespace WwDevicesDotNet.Winctrl.Mcdu
     {
         protected override byte CommandPrefix => 0x32;
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The MCDU's visible area is 80mm tall against the PFP family's 86mm, so 14
+        /// rows of 32px glyphs overflow it by a few pixels. Measured with calipers and
+        /// corroborated by a colour ladder drawn to the panel.
+        /// </remarks>
+        public override int MaxGlyphHeight => 31;
+
         private static readonly Dictionary<Led, byte> _LedIndicatorCodeMap = new Dictionary<Led, byte>() {
             { Led.Fail, 0x08 },
             { Led.Fm, 0x09 },
