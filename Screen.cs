@@ -14,7 +14,17 @@ namespace WwDevicesDotNet
         /// <summary>
         /// The rows of cells on the MCDU display.
         /// </summary>
-        public Row[] Rows { get; } = new Row[Metrics.Lines];
+        public Row[] Rows { get; }
+
+        /// <summary>
+        /// The number of rows on this screen.
+        /// </summary>
+        public int LineCount => Rows.Length;
+
+        /// <summary>
+        /// The number of columns on this screen.
+        /// </summary>
+        public int ColumnCount => Rows[0].Cells.Length;
 
         public Row CurrentRow => Rows[Line];
 
@@ -76,7 +86,7 @@ namespace WwDevicesDotNet
         {
             get => _Column;
             set {
-                if(value < 0 || value >= Metrics.Columns) {
+                if(value < 0 || value >= ColumnCount) {
                     throw new ArgumentOutOfRangeException(nameof(Column), value, "Not a valid column");
                 }
                 _Column = value;
@@ -112,10 +122,25 @@ namespace WwDevicesDotNet
         /// Creates a new object.
         /// </summary>
         /// <remarks></remarks>
-        public Screen()
+        public Screen() : this(Metrics.Lines, Metrics.Columns)
         {
+        }
+
+        /// <summary>
+        /// Creates a screen of an arbitrary size. The device is told the grid to lay out
+        /// when the screen is sent, so a panel is not restricted to
+        /// <see cref="Metrics.Lines"/> x <see cref="Metrics.Columns"/>.
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <param name="columns"></param>
+        public Screen(int lines, int columns)
+        {
+            if(lines < 1) {
+                throw new ArgumentOutOfRangeException(nameof(lines), lines, "Screens need at least one line");
+            }
+            Rows = new Row[lines];
             for(var idx = 0;idx < Rows.Length;++idx) {
-                Rows[idx] = new Row();
+                Rows[idx] = new Row(columns);
             }
         }
 
@@ -152,14 +177,18 @@ namespace WwDevicesDotNet
             if(other == null) {
                 throw new ArgumentNullException(nameof(other));
             }
-            for(var idx = 0;idx < Rows.Length;++idx) {
+            var shared = Math.Min(Rows.Length, other.Rows.Length);
+            for(var idx = 0;idx < shared;++idx) {
                 Rows[idx].CopyFrom(other.Rows[idx]);
+            }
+            for(var idx = shared;idx < Rows.Length;++idx) {
+                Rows[idx].Clear();
             }
             RightToLeft = other.RightToLeft;
             Colour = other.Colour;
             BackgroundColour = other.BackgroundColour;
-            Column = other.Column;
-            Line = other.Line;
+            Column = Math.Min(other.Column, ColumnCount - 1);
+            Line = Math.Min(other.Line, LineCount - 1);
             Small = other.Small;
         }
 
@@ -190,7 +219,7 @@ namespace WwDevicesDotNet
         public void AdvanceColumn()
         {
             if(!RightToLeft) {
-                Column = Math.Min(Column + 1, Metrics.Columns - 1);
+                Column = Math.Min(Column + 1, ColumnCount - 1);
             } else {
                 Column = Math.Max(Column - 1, 0);
             }
@@ -226,20 +255,20 @@ namespace WwDevicesDotNet
 
         public void CentreColumnFor(string text)
         {
-            Column = Math.Max(0, (Metrics.Columns - text.Length) / 2);
+            Column = Math.Max(0, (ColumnCount - text.Length) / 2);
         }
 
         public void Goto(int line, int column = 0)
         {
             Line = line >= 0
-                ? Math.Min(line, Metrics.Lines - 1)
-                : Math.Max(0, Metrics.Lines + line);
+                ? Math.Min(line, LineCount - 1)
+                : Math.Max(0, LineCount + line);
             Column = column >= 0
-                ? Math.Min(column, Metrics.Columns - 1)
-                : Math.Max(0, Metrics.Columns + column);
+                ? Math.Min(column, ColumnCount - 1)
+                : Math.Max(0, ColumnCount + column);
         }
 
-        public void GotoMiddleLine() => Line = Metrics.Lines / 2;
+        public void GotoMiddleLine() => Line = LineCount / 2;
 
         public void LeftLineSelect(int line, string text)
         {
@@ -270,12 +299,12 @@ namespace WwDevicesDotNet
 
         public void GotoEndOfLine()
         {
-            Column = RightToLeft ? 0 : Metrics.Columns - 1;
+            Column = RightToLeft ? 0 : ColumnCount - 1;
         }
 
         public void GotoStartOfLine()
         {
-            Column = RightToLeft ? Metrics.Columns - 1 : 0;
+            Column = RightToLeft ? ColumnCount - 1 : 0;
         }
 
         public void ForRightToLeft()
@@ -290,12 +319,21 @@ namespace WwDevicesDotNet
             GotoStartOfLine();
         }
 
-        public void ScrollRows(int startRow = 0, int endRow = Metrics.Lines - 1)
+        /// <summary>
+        /// Scrolls a range of rows up by one. A negative <paramref name="endRow"/> means
+        /// the last row of this screen, whatever its size.
+        /// </summary>
+        /// <param name="startRow"></param>
+        /// <param name="endRow"></param>
+        public void ScrollRows(int startRow = 0, int endRow = -1)
         {
+            if(endRow < 0) {
+                endRow = LineCount - 1;
+            }
             if(startRow < 0 || startRow > endRow) {
                 throw new ArgumentOutOfRangeException(nameof(startRow));
             }
-            if(endRow < startRow || endRow >= Metrics.Lines) {
+            if(endRow < startRow || endRow >= LineCount) {
                 throw new ArgumentOutOfRangeException(nameof(endRow));
             }
             for(var rowIdx = startRow;rowIdx < endRow;++rowIdx) {

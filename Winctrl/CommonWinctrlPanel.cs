@@ -30,7 +30,14 @@ namespace WwDevicesDotNet.Winctrl
 
         protected abstract Func<Key, (int Flag, int Offset)> KeyToFlagOffsetCallback { get; }
 
-        protected readonly Screen _EmptyScreen = new Screen();
+        /// <summary>
+        /// The character grid this panel runs. Override to drive a panel with a grid
+        /// other than the default - the device is told the size during initialisation
+        /// and lays screen data out accordingly.
+        /// </summary>
+        protected virtual (int Lines, int Columns) ScreenSize => (Metrics.Lines, Metrics.Columns);
+
+        protected readonly Screen _EmptyScreen;
         protected HidDevice _HidDevice;
         protected HidStream _HidStream;
         protected UsbWriter _UsbWriter;
@@ -112,6 +119,15 @@ namespace WwDevicesDotNet.Winctrl
 
         /// <inheritdoc/>
         public AutoBrightnessSettings AutoBrightness { get; } = new AutoBrightnessSettings();
+
+        /// <inheritdoc/>
+        public int GlyphPixelWidth => _FontWriter?.GlyphPixelWidth ?? 0;
+
+        /// <inheritdoc/>
+        public int GlyphPixelHeight => _FontWriter?.GlyphPixelHeight ?? 0;
+
+        /// <inheritdoc/>
+        public virtual int MaxGlyphHeight => 32;
 
         /// <inheritdoc/>
         public bool HasAmbientLightSensor => true;
@@ -205,7 +221,8 @@ namespace WwDevicesDotNet.Winctrl
             DeviceId = deviceId;
             Leds = new Leds();
             SupportedLeds = LedIndicatorCodeMap.Select(r => r.Key).ToArray();
-            Screen = new Screen();
+            Screen = new Screen(ScreenSize.Lines, ScreenSize.Columns);
+            _EmptyScreen = new Screen(ScreenSize.Lines, ScreenSize.Columns);
             Output = new Compositor(Screen);
             Palette = new Palette();
             HidSharp.DeviceList.Local.Changed += HidSharpDeviceList_Changed;
@@ -291,7 +308,7 @@ namespace WwDevicesDotNet.Winctrl
 
             PanelSpecificInitialisation();
 
-            InitialiseBasicFontsAndColours();
+            InitialiseFormatTable();
             RefreshLeds();
             RefreshBrightnesses();
         }
@@ -300,32 +317,129 @@ namespace WwDevicesDotNet.Winctrl
         {
         }
 
-        protected void InitialiseBasicFontsAndColours()
+        private const int StructuredFunctionClearFeatureInfo = 0x11E;
+        private const int StructuredFunctionSetScreenInfo = 0x118;
+        private const int StructuredFunctionSetFeatureInfo = 0x119;
+        private const int StructuredFunctionSetCompositeIndexBytes = 0x11A;
+        private const int StructuredFunctionBuildFormatTable = 0x11C;
+
+        private const int StructuredFunctionRefreshLcd = 0x103;
+        private const int StructuredFunctionFillRect = 0x110;
+        private const int StructuredFunctionSetTextColour = 0x112;
+        private const int StructuredFunctionSetBackColour = 0x113;
+
+        private static readonly byte[] _StructuredTimestamp = { 0x5F, 0x63, 0x31, 0x00 };
+
+        /// <summary>
+        /// The addressable framebuffer behind the character grid. Screen refreshes only
+        /// repaint the grid, so anything outside it has to be cleared separately.
+        /// </summary>
+        protected virtual (int Width, int Height) FramebufferSize => (640, 480);
+
+        private static readonly string[] _FeatureDeclarations = {
+            "0100050000000200000000000000", "0100060000000300000000000000",
+            "0200000000ff0400000000000000", "020000a5ffff0500000000000000",
+            "0200ffffffff0600000000000000", "0200ffff00ff0700000000000000",
+            "02003dff00ff0800000000000000", "0200ff63ffff0900000000000000",
+            "02000000ffff0a00000000000000", "020000ffffff0b00000000000000",
+            "0200425c61ff0c00000000000000", "0200777777ff0d00000000000000",
+            "02005e7379ff0e00000000000000", "0300000000ff0f00000000000000",
+            "030000a5ffff1000000000000000", "0300ffffffff1100000000000000",
+            "0300ffff00ff1200000000000000", "03003dff00ff1300000000000000",
+            "0300ff63ffff1400000000000000", "03000000ffff1500000000000000",
+            "030000ffffff1600000000000000", "0300425c61ff1700000000000000",
+            "0300777777ff1800000000000000", "03005e7379ff1900000000000000",
+            "0400000000001a00000000000000", "0400010000001b00000000000000",
+            "0400020000001c00000000000000",
+        };
+
+        /// <summary>
+        /// Builds one structured sub-command for report 0xF0.
+        /// </summary>
+        /// <param name="functionId"></param>
+        /// <param name="data"></param>
+        private byte[] StructuredCommand(int functionId, byte[] data = null)
         {
-            _UsbWriter?.LockForOutput(() => {
-                var packets = new string[] {
-                    $"f0000138{CP}00001e0100005f6331000000000000{CP}0000180100005f6331000008000000340018000e001800{CP}0000190100005f633100000e00000000",
-                    $"f00002380000000100050000000200000000000000{CP}0000190100005f633100000e0000000100060000000300000000000000{CP}00001901000000000000",
-                    $"f00003385f633100000e0000000200000000ff0400000000000000{CP}0000190100005f633100000e000000020000a5ffff0500000000000000{CP}00000000",
-                    $"f00004380000190100005f633100000e0000000200ffffffff0600000000000000{CP}0000190100005f633100000e0000000200ffff00ff0700000000000000",
-                    $"f000053800000000{CP}0000190100005f633100000e00000002003dff00ff0800000000000000{CP}0000190100005f633100000e0000000200ff6300000000",
-                    $"f0000638ffff0900000000000000{CP}0000190100005f633100000e00000002000000ffff0a00000000000000{CP}0000190100005f633100000e0000000000",
-                    $"f00007380000020000ffffff0b00000000000000{CP}0000190100005f633100000e0000000200425c61ff0c00000000000000{CP}0000190100005f00000000",
-                    $"f0000838633100000e0000000200777777ff0d00000000000000{CP}0000190100005f633100000e00000002005e7379ff0e00000000000000{CP}0000000000",
-                    $"f000093800190100005f633100000e0000000300000000ff0f00000000000000{CP}0000190100005f633100000e000000030000a5ffff100000000000000000",
-                    $"f0000a38000000{CP}0000190100005f633100000e0000000300ffffffff1100000000000000{CP}0000190100005f633100000e0000000300ffff0000000000",
-                    $"f0000b38ff1200000000000000{CP}0000190100005f633100000e00000003003dff00ff1300000000000000{CP}0000190100005f633100000e000000000000",
-                    $"f0000c38000300ff63ffff1400000000000000{CP}0000190100005f633100000e00000003000000ffff1500000000000000{CP}0000190100005f6300000000",
-                    $"f0000d383100000e000000030000ffffff1600000000000000{CP}0000190100005f633100000e0000000300425c61ff1700000000000000{CP}000000000000",
-                    $"f0000e38190100005f633100000e0000000300777777ff1800000000000000{CP}0000190100005f633100000e00000003005e7379ff19000000000000000000",
-                    $"f0000f380000{CP}0000190100005f633100000e0000000400000000001a00000000000000{CP}0000190100005f633100000e00000004000100000000000000",
-                    $"f00010381b00000000000000{CP}0000190100005f633100000e0000000400020000001c00000000000000{CP}00001a0100005f633100000100000000000000",
-                    $"f000111202{CP}00001c0100005f6331000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-                };
-                foreach(var packet in packets) {
-                    _UsbWriter.SendStringPacket(packet);
-                }
-            });
+            data = data ?? Array.Empty<byte>();
+            var result = new byte[17 + data.Length];
+            result[0] = CommandPrefix;
+            result[1] = 0xBB;
+            BitConverter.GetBytes(functionId).CopyTo(result, 4);
+            _StructuredTimestamp.CopyTo(result, 8);
+            BitConverter.GetBytes(data.Length).CopyTo(result, 13);
+            data.CopyTo(result, 17);
+            return result;
+        }
+
+        /// <summary>
+        /// Splits a stream of structured sub-commands into 64 byte 0xF0 reports. A
+        /// sub-command may straddle a packet boundary, the device reassembles the stream.
+        /// </summary>
+        /// <param name="stream"></param>
+        private void SendStructuredCommands(IEnumerable<byte> stream)
+        {
+            var bytes = stream.ToArray();
+            const int maxChunk = 56;
+            var sequence = 1;
+            for(var offset = 0;offset < bytes.Length;offset += maxChunk) {
+                var length = Math.Min(maxChunk, bytes.Length - offset);
+                var packet = new byte[64];
+                packet[0] = 0xF0;
+                packet[2] = (byte)sequence++;
+                packet[3] = (byte)length;
+                Array.Copy(bytes, offset, packet, 4, length);
+                _UsbWriter.SendPacket(packet);
+            }
+        }
+
+        /// <summary>
+        /// The grid the device is told to lay screen data out on. Sent during
+        /// initialisation, and taken from <see cref="Screen"/> so that a panel driven
+        /// with a non-default screen size gets the matching declaration.
+        /// </summary>
+        protected virtual (int X, int Y) ScreenOrigin => (0x34, 0x18);
+
+        /// <inheritdoc/>
+        public void ClearFramebuffer()
+        {
+            var black = new byte[] { 0xFF, 0x00, 0x00, 0x00 };
+            var size = FramebufferSize;
+            var rectangle = new List<byte>();
+            rectangle.AddRange(BitConverter.GetBytes((ushort)0));
+            rectangle.AddRange(BitConverter.GetBytes((ushort)0));
+            rectangle.AddRange(BitConverter.GetBytes((ushort)size.Width));
+            rectangle.AddRange(BitConverter.GetBytes((ushort)size.Height));
+
+            var stream = new List<byte>();
+            stream.AddRange(StructuredCommand(StructuredFunctionSetTextColour, black));
+            stream.AddRange(StructuredCommand(StructuredFunctionSetBackColour, black));
+            stream.AddRange(StructuredCommand(StructuredFunctionFillRect, rectangle.ToArray()));
+            stream.AddRange(StructuredCommand(StructuredFunctionRefreshLcd));
+
+            _UsbWriter?.LockForOutput(() => SendStructuredCommands(stream));
+        }
+
+        protected void InitialiseFormatTable()
+        {
+            var stream = new List<byte>();
+            stream.AddRange(StructuredCommand(StructuredFunctionClearFeatureInfo));
+
+            var origin = ScreenOrigin;
+            var screenInfo = new List<byte>();
+            screenInfo.AddRange(BitConverter.GetBytes((ushort)origin.X));
+            screenInfo.AddRange(BitConverter.GetBytes((ushort)origin.Y));
+            screenInfo.AddRange(BitConverter.GetBytes((ushort)Screen.LineCount));
+            screenInfo.AddRange(BitConverter.GetBytes((ushort)Screen.ColumnCount));
+            stream.AddRange(StructuredCommand(StructuredFunctionSetScreenInfo, screenInfo.ToArray()));
+
+            foreach(var declaration in _FeatureDeclarations) {
+                stream.AddRange(StructuredCommand(StructuredFunctionSetFeatureInfo, declaration.ToByteArray()));
+            }
+
+            stream.AddRange(StructuredCommand(StructuredFunctionSetCompositeIndexBytes, new byte[] { 2 }));
+            stream.AddRange(StructuredCommand(StructuredFunctionBuildFormatTable));
+
+            _UsbWriter?.LockForOutput(() => SendStructuredCommands(stream));
         }
 
         protected virtual void ProcessKeyboardEvent(Key key, bool pressed)
@@ -403,7 +517,7 @@ namespace WwDevicesDotNet.Winctrl
         }
 
         /// <inheritdoc/>
-        public void UseFont(McduFontFile fontFileContent, bool useFullWidth, bool skipDuplicateCheck = false)
+        public void UseFont(McduFontFile fontFileContent, bool useFullWidth, bool skipDuplicateCheck = true)
         {
             _UsbWriter?.LockForOutput(() => {
                 var fontUploaded = _FontWriter.SendFont(
@@ -462,6 +576,7 @@ namespace WwDevicesDotNet.Winctrl
             int backlightBrightnessPercent = 0
         )
         {
+            ClearFramebuffer();
             Screen.Clear();
             Leds.TurnAllOn(false);
             _IlluminationWriter?.SendLedBrightnessPercent(ledBrightnessPercent);
@@ -474,6 +589,8 @@ namespace WwDevicesDotNet.Winctrl
         /// <inheritdoc/>
         public void Reset()
         {
+            InitialiseFormatTable();
+            ClearFramebuffer();
             Screen.Clear();
             Leds.TurnAllOn(false);
             DisplayBrightnessPercent = 100;

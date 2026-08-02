@@ -11,10 +11,24 @@ namespace WwDevicesDotNet
     /// </summary>
     public class Row
     {
-        public Cell[] Cells { get; } = new Cell[Metrics.Columns];
+        public Cell[] Cells { get; }
 
-        public Row()
+        public Row() : this(Metrics.Columns)
         {
+        }
+
+        /// <summary>
+        /// Creates a row of an arbitrary width. Panels take their column count from the
+        /// screen they are sent, so this is what lets a device run a grid that is not
+        /// <see cref="Metrics.Columns"/> wide.
+        /// </summary>
+        /// <param name="columns"></param>
+        public Row(int columns)
+        {
+            if(columns < 1) {
+                throw new ArgumentOutOfRangeException(nameof(columns), columns, "Rows need at least one column");
+            }
+            Cells = new Cell[columns];
             for(var idx = 0;idx < Cells.Length;++idx) {
                 Cells[idx] = new Cell();
             }
@@ -36,13 +50,22 @@ namespace WwDevicesDotNet
             }
         }
 
+        /// <summary>
+        /// Copies this row into another, which need not be the same width. Cells beyond
+        /// the overlap are cleared rather than left holding whatever was there before.
+        /// </summary>
+        /// <param name="other"></param>
         public void CopyTo(Row other)
         {
             if(other == null) {
                 throw new ArgumentNullException(nameof(other));
             }
-            for(var idx = 0;idx < Cells.Length;++idx) {
+            var shared = Math.Min(Cells.Length, other.Cells.Length);
+            for(var idx = 0;idx < shared;++idx) {
                 other.Cells[idx].CopyFrom(Cells[idx]);
+            }
+            for(var idx = shared;idx < other.Cells.Length;++idx) {
+                other.Cells[idx].Clear();
             }
         }
 

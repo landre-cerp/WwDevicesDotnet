@@ -75,6 +75,32 @@ namespace WwDevicesDotNet
         int YOffset { get; set; }
 
         /// <summary>
+        /// The pixel width of the glyphs in the font last passed to <see cref="UseFont"/>,
+        /// or 0 if no font has been sent. This is <see cref="McduFontFile.GlyphFullWidth"/>
+        /// or <see cref="McduFontFile.GlyphWidth"/> depending on the <c>useFullWidth</c>
+        /// argument, and it is the step the device advances by between characters - so it
+        /// is what a caller needs in order to work out how many columns will fit across
+        /// <see cref="Metrics.DisplayWidthPixels"/>.
+        /// </summary>
+        int GlyphPixelWidth { get; }
+
+        /// <summary>
+        /// The pixel height of the glyphs in the font last passed to <see cref="UseFont"/>,
+        /// or 0 if no font has been sent.
+        /// </summary>
+        int GlyphPixelHeight { get; }
+
+        /// <summary>
+        /// The tallest glyph height that still lets a full screen fit inside the
+        /// panel's visible area. The bezels differ: the MCDU's aperture is 6mm
+        /// shorter than the PFP family's, so a font that fits one overflows the
+        /// other. Pick the font to upload with this rather than assuming a height,
+        /// because the choice belongs to the panel and not to what is being drawn
+        /// on it.
+        /// </summary>
+        int MaxGlyphHeight { get; }
+
+        /// <summary>
         /// True if the device has ambient light sensors.
         /// </summary>
         bool HasAmbientLightSensor { get; }
@@ -236,6 +262,14 @@ namespace WwDevicesDotNet
         /// "skip duplicate" checks.
         /// </param>
         void UseFont(McduFontFile fontFileContent, bool useFullWidth, bool skipDuplicateCheck = true);
+
+        /// <summary>
+        /// Paints the whole framebuffer black, including the margins outside the
+        /// character grid. Screen refreshes only repaint the grid, so anything drawn
+        /// beyond it - or left over from a session that declared a different grid -
+        /// survives until this is called.
+        /// </summary>
+        void ClearFramebuffer();
 
         /// <summary>
         /// Resets the display and turns everything off.

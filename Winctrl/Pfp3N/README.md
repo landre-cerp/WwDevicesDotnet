@@ -9,8 +9,8 @@ with other Winctrl panels, including the shared
 
 ## Command Prefix
 
-The command prefix is 0x31 0xbb (unconfirmed - see `Winctrl\README.md`'s
-Command Prefix table).
+The command prefix is 0x31 0xbb (see `Winctrl\README.md`'s Command Prefix
+table). Confirmed from a USBPcap capture of SimAppPro driving a PFP-3N.
 
 ## Implementation
 
