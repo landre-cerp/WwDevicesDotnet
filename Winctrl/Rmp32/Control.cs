@@ -10,9 +10,9 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
     /// the report ID in the input report.
     /// </summary>
     /// <remarks>
-    /// Confirmed by capture: 1-7, 15-21. Names for 1-14 follow the SimAppPro
-    /// panel drawing and still need checking against the physical keys.
-    /// Rotary encoders emit a pulse on a "left" or "right" button for each detent.
+    /// All 21 buttons confirmed on hardware (RMP L).
+    /// Rotary rings emit a pulse on a "left" or "right" button for each detent.
+    /// SEL is an indicator, not a button.
     /// </remarks>
     public enum Control
     {
@@ -33,15 +33,14 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
         Mls,                 // 13
         Adf,                 // 14
 
-        // Which of the two rotary rings is "outer" and which is "inner" is
-        // not confirmed yet: encoder A = 15/16, encoder B = 17/18.
-        EncoderALeft,        // 15
-        EncoderARight,       // 16
-        EncoderBLeft,        // 17
-        EncoderBRight,       // 18
+        // The big knob has two rings (confirmed on hardware).
+        LowerRingLeft,       // 15  lower ring, counter-clockwise
+        LowerRingRight,      // 16  lower ring, clockwise
+        UpperRingLeft,       // 17  upper ring, counter-clockwise
+        UpperRingRight,      // 18  upper ring, clockwise
 
         KnobPush,            // 19
-        PowerOff,            // 20  ON/OFF toggle, OFF position
-        PowerOn,             // 21  ON/OFF toggle, ON position
+        PowerUp,             // 20  ON/OFF toggle, up position
+        PowerDown,           // 21  ON/OFF toggle, down position (held at power-up)
     }
 }

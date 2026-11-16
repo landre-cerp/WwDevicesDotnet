@@ -15,8 +15,8 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
     ///
     /// Display protocol (same chunked 0xF0 stream as the AGP32):
     ///   cmd 0x02 framebuffer write, dataLen 0x28 (40 bytes):
-    ///     bytes 4..9   ACTIVE display, 6 digits left to right
-    ///     bytes 10..15 STBY/CRS display, 6 digits left to right
+    ///     bytes 4..9   STBY/CRS display (right), 6 digits left to right
+    ///     bytes 10..15 ACTIVE display (left), 6 digits left to right
     ///     other bytes  0 (not yet understood)
     ///   Each digit byte is a 7-segment glyph, bit 0 = a .. bit 6 = g, bit 7 = decimal point.
     ///   cmd 0x03 commit (dataLen 0).
@@ -24,8 +24,8 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
     ///   last byte spills into the second report, ahead of the commit message.
     ///
     /// Illumination (14 byte 02 82 BB 00 00 03 49 type value):
-    ///   type 00 = backlight, 01 = digital tube backlight (0..255),
-    ///   type 02 = marker light (assumed, not seen in captures),
+    ///   type 00 = key backlight, 01 = display backlight (0..255),
+    ///   type 02 = LED brightness (0..255),
     ///   type 03..10 = IND1..IND14 (0 / 1).
     ///
     /// Input report (24 bytes, ID 01): 21 buttons in bytes 1-3, see <see cref="ControlMap"/>.
@@ -37,8 +37,8 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
         const byte CmdWriteFramebuffer = 0x02;
         const byte CmdCommit = 0x03;
         const int FramebufferLength = 40;
-        const int ActiveOffset = 4;
-        const int StandbyOffset = 10;
+        const int StandbyOffset = 4;
+        const int ActiveOffset = 10;
         const int DigitCount = 6;
         const int FirstChunkLength = 56;
 
@@ -103,6 +103,39 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
             PutText(framebuffer, ActiveOffset, rmpState.ActiveDisplay);
             PutText(framebuffer, StandbyOffset, rmpState.StandbyDisplay);
 
+            WriteFramebuffer(framebuffer);
+        }
+
+        /// <summary>
+        /// Writes a raw 40-byte display framebuffer. For protocol exploration only.
+        /// </summary>
+        public void UpdateDisplayRaw(byte[] framebuffer)
+        {
+            if (!IsConnected)
+            {
+                return;
+            }
+            if (framebuffer == null || framebuffer.Length != FramebufferLength)
+            {
+                throw new ArgumentException($"The framebuffer must be {FramebufferLength} bytes long.", nameof(framebuffer));
+            }
+
+            WriteFramebuffer(framebuffer);
+        }
+
+        /// <summary>
+        /// Sends a raw 03 49 illumination command. For protocol exploration only.
+        /// </summary>
+        public void SendIllumination(byte type, byte value)
+        {
+            if (IsConnected)
+            {
+                SendCommand(BuildIlluminationCommand(type, value));
+            }
+        }
+
+        void WriteFramebuffer(byte[] framebuffer)
+        {
             var timestamp = (uint)_Uptime.ElapsedMilliseconds;
             var stream = new List<byte>();
             stream.AddRange(BuildMessage(CmdWriteFramebuffer, timestamp, framebuffer));

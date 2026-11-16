@@ -21,6 +21,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="tools\**" />
+      <EmbeddedResource Remove="tools\**" />
+      <None Remove="tools\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Include=".github\FUNDING.yml" />
       <None Include=".github\workflows\build.yml" />
       <None Include=".github\workflows\publish.yml" />

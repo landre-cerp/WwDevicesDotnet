@@ -277,3 +277,7 @@ FodyWeavers.xsd
 
 # Rider
 .idea/
+
+# Rmp32Probe output
+rmp32-probe-*.json
+rmp32-probe-*.log

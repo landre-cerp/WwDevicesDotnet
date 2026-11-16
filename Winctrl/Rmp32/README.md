@@ -18,24 +18,26 @@ no key presses.
 | Bytes | Content |
 | ---   | --- |
 | 1-3   | 21 buttons, button N = bit N-1 (LSB first) |
-| 10-11 | encoder A running counter (u16 LE) |
-| 12-13 | encoder B running counter (u16 LE) |
+| 10-11 | lower ring running counter (u16 LE) |
+| 12-13 | upper ring running counter (u16 LE) |
 
-Buttons: 1 swap, 2-5 VHF1/VHF2/VHF3/LOAD, 6-8 HF1/HF2/AM, 9-14 NAV/VOR/ILS/GLS/MLS/ADF
-(1-14 per the SimAppPro drawing; only 1-7 were pressed in the capture),
-15/16 encoder A -/+, 17/18 encoder B -/+ (one pulse per detent, counter changes too),
-19 knob push, 20 toggle OFF, 21 toggle ON.
+Buttons (all confirmed on an RMP L): 1 swap, 2-5 VHF1/VHF2/VHF3/LOAD, 6-8 HF1/HF2/AM,
+9-14 NAV/VOR/ILS/GLS/MLS/ADF, 15/16 lower ring left/right, 17/18 upper ring left/right
+(one pulse per detent, the matching counter also changes), 19 knob push,
+20 toggle up, 21 toggle down. SEL is an indicator, not a button.
 
 ## Illumination
 
 `02 82 BB 00 00 03 49 <type> <value>` (14 bytes):
-`00` backlight, `01` digital tube backlight (0-255), `02` marker light (assumed),
-`03`-`10` IND1-IND14 (0/1).
+`00` key backlight, `01` display (digital tube) backlight, `02` LED brightness (all 0-255, confirmed),
+`03`-`10` IND1-IND14 (0/1): SEL lamp, then the triangles above VHF1-VHF3, LOAD, HF1, HF2, AM, NAV, VOR, ILS, GLS, MLS, ADF (confirmed).
 
 ## Displays
 
 Chunked `F0` stream, as on the AGP32 (see `Rmp32Device`). Framebuffer write
-(cmd `02`, 40 bytes): bytes 4-9 ACTIVE, bytes 10-15 STBY/CRS, 6 digits each,
+(cmd `02`, 40 bytes): bytes 4-9 STBY/CRS (right display), bytes 10-15 ACTIVE (left display), 6 digits each,
 7-segment glyph per byte (bit 7 = decimal point). Commit is cmd `03`.
+Bytes 0-3 and 16-39 must stay 0: a frame with 0xFF in either group is ignored by
+the panel (tested on an RMP L).
 The write message is 57 bytes, so its last byte spills into the next report
 ahead of the commit message.

@@ -7,7 +7,7 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
     /// Maps Winctrl 32 RMP controls to input report byte offsets and bit flags.
     /// The report is 24 bytes: ID 0x01, three button bytes (21 buttons, bytes
     /// 1-3), then two little-endian 16-bit running encoder counters at bytes
-    /// 10-11 (encoder A) and 12-13 (encoder B).
+    /// 10-11 (lower ring) and 12-13 (upper ring).
     /// </summary>
     static class ControlMap
     {

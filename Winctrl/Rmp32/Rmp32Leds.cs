@@ -6,13 +6,26 @@ using System.Collections.Generic;
 namespace WwDevicesDotNet.Winctrl.Rmp32
 {
     /// <summary>
-    /// The 14 indicator LEDs of the RMP32 (IND1..IND14), as the type codes
-    /// used by the 03 49 illumination command.
+    /// The 14 indicator LEDs of the RMP32 (IND1..IND14 in SimAppPro), as the type
+    /// codes used by the 03 49 illumination command. Each is the SEL lamp or the
+    /// triangle above the key of the same name (confirmed on hardware).
     /// </summary>
     public enum Rmp32Led : byte
     {
-        Ind1 = 0x03, Ind2, Ind3, Ind4, Ind5, Ind6, Ind7,
-        Ind8, Ind9, Ind10, Ind11, Ind12, Ind13, Ind14,
+        Sel = 0x03,   // IND1
+        Vhf1,         // IND2
+        Vhf2,         // IND3
+        Vhf3,         // IND4
+        Load,         // IND5
+        Hf1,          // IND6
+        Hf2,          // IND7
+        Am,           // IND8
+        Nav,          // IND9
+        Vor,          // IND10
+        Ils,          // IND11
+        Gls,          // IND12
+        Mls,          // IND13
+        Adf,          // IND14
     }
 
     /// <summary>
