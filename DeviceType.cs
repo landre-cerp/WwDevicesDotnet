@@ -28,5 +28,7 @@ namespace WwDevicesDotNet
         PDC3M,
 
         Agp32,
+
+        Rmp32,
     }
 }

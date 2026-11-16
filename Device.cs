@@ -60,5 +60,10 @@ namespace WwDevicesDotNet
         /// A Winctrl 32 AGP Metal panel.
         /// </summary>
         WinctrlAgp32,
+
+        /// <summary>
+        /// A Winctrl 32 RMP (Radio Management Panel).
+        /// </summary>
+        WinctrlRmp32,
     }
 }

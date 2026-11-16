@@ -8,6 +8,7 @@ using WwDevicesDotNet.Winctrl.FcuAndEfis;
 using WwDevicesDotNet.Winctrl.Pap3;
 using WwDevicesDotNet.Winctrl.Pdc3nm;
 using WwDevicesDotNet.Winctrl.Agp32;
+using WwDevicesDotNet.Winctrl.Rmp32;
 
 namespace WwDevicesDotNet
 {
@@ -131,6 +132,11 @@ namespace WwDevicesDotNet
                             var agp32 = new Agp32Device(hidDevice, deviceId);
                             agp32.Initialise();
                             result = agp32;
+                            break;
+                        case Device.WinctrlRmp32:
+                            var rmp32 = new Rmp32Device(hidDevice, deviceId);
+                            rmp32.Initialise();
+                            result = rmp32;
                             break;
                     }
                 }
