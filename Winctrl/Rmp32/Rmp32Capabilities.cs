@@ -17,7 +17,7 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
         public bool CanDisplayQnhQfe => false;
         public bool HasPilotCourseDisplay => false;
         public bool HasCopilotCourseDisplay => false;
-        public bool SupportsAlphanumericDisplay => false;
+        public bool SupportsAlphanumericDisplay => true;
         public bool HasFlightLevelMode => false;
         public bool HasMachSpeedMode => false;
         public bool HasClockDisplay => false;
