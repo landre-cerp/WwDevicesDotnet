@@ -92,9 +92,12 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
                 return;
             }
 
-            SendCommand(BuildIlluminationCommand(0x00, panelBacklight));
-            SendCommand(BuildIlluminationCommand(0x01, lcdBacklight));
-            SendCommand(BuildIlluminationCommand(0x02, ledBacklight));
+            lock (_StreamLock)
+            {
+                SendCommand(BuildIlluminationCommand(0x00, panelBacklight));
+                SendCommand(BuildIlluminationCommand(0x01, lcdBacklight));
+                SendCommand(BuildIlluminationCommand(0x02, ledBacklight));
+            }
         }
 
         /// <inheritdoc/>
@@ -136,7 +139,10 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
         {
             if (IsConnected)
             {
-                SendCommand(BuildIlluminationCommand(type, value));
+                lock (_StreamLock)
+                {
+                    SendCommand(BuildIlluminationCommand(type, value));
+                }
             }
         }
 
@@ -168,9 +174,12 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
                 return;
             }
 
-            foreach (var kvp in rmpLeds.States)
+            lock (_StreamLock)
             {
-                SendCommand(BuildIlluminationCommand((byte)kvp.Key, kvp.Value ? (byte)1 : (byte)0));
+                foreach (var kvp in rmpLeds.States)
+                {
+                    SendCommand(BuildIlluminationCommand((byte)kvp.Key, kvp.Value ? (byte)1 : (byte)0));
+                }
             }
         }
 
@@ -196,7 +205,10 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
         {
             if (IsConnected)
             {
-                SendCommand(BuildIlluminationCommand((byte)led, on ? (byte)1 : (byte)0));
+                lock (_StreamLock)
+                {
+                    SendCommand(BuildIlluminationCommand((byte)led, on ? (byte)1 : (byte)0));
+                }
             }
         }
 
