@@ -191,7 +191,8 @@ namespace WwDevicesDotNet.Winctrl
         /// <param name="length">The length of the data.</param>
         protected virtual void ProcessReport(byte[] data, int length)
         {
-            if(length < 25)
+            // Some panels (RMP32) send 24-byte reports, others 25.
+            if(length < 13)
                 return;
 
             for(var i = 1; i < 13; i++) {

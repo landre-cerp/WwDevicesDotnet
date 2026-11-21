@@ -150,6 +150,27 @@ namespace WwDevicesDotNet
             "32 AGP Metal", 0x4098, 0xBB80, Device.WinctrlAgp32, DeviceUser.NotApplicable, DeviceType.Agp32
         );
 
+        /// <summary>
+        /// The identifier for a Winctrl 32 RMP configured as Left unit.
+        /// </summary>
+        public static readonly DeviceIdentifier WinctrlRmp32LeftDevice = new DeviceIdentifier(
+            "32 RMP L", 0x4098, 0xBB83, Device.WinctrlRmp32, DeviceUser.NotApplicable, DeviceType.Rmp32
+        );
+
+        /// <summary>
+        /// The identifier for a Winctrl 32 RMP configured as Right unit.
+        /// </summary>
+        public static readonly DeviceIdentifier WinctrlRmp32RightDevice = new DeviceIdentifier(
+            "32 RMP R", 0x4098, 0xBB84, Device.WinctrlRmp32, DeviceUser.NotApplicable, DeviceType.Rmp32
+        );
+
+        /// <summary>
+        /// The identifier for a Winctrl 32 RMP configured as Centre unit.
+        /// </summary>
+        public static readonly DeviceIdentifier WinctrlRmp32CentreDevice = new DeviceIdentifier(
+            "32 RMP C", 0x4098, 0xBB85, Device.WinctrlRmp32, DeviceUser.NotApplicable, DeviceType.Rmp32
+        );
+
 
         private static readonly DeviceIdentifier[] _AllSupportedDevices = new DeviceIdentifier[] {
             WinctrlMcduCaptainDevice,
@@ -178,6 +199,9 @@ namespace WwDevicesDotNet
             WinctrlPdc3NDeviceLeft,
             WinctrlPdc3NDeviceRight,
             WinctrlAgp32Device,
+            WinctrlRmp32LeftDevice,
+            WinctrlRmp32RightDevice,
+            WinctrlRmp32CentreDevice,
         };
 
         /// <summary>
