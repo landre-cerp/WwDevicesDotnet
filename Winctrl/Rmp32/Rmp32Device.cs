@@ -42,6 +42,9 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
         const int DigitCount = 6;
         const int FirstChunkLength = 56;
 
+        // Serializes everything that touches the F0 stream: a framebuffer write is two reports
+        // that must reach the panel back to back, and the sequence number is shared state.
+        readonly object _StreamLock = new object();
         ushort _SequenceNumber;
         readonly Stopwatch _Uptime = Stopwatch.StartNew();
 
@@ -60,8 +63,11 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
             var packet = new byte[64];
             packet[0] = 0xF0;
             packet[1] = 0x02;
-            SendCommand(packet);
-            _SequenceNumber = 0;
+            lock (_StreamLock)
+            {
+                SendCommand(packet);
+                _SequenceNumber = 0;
+            }
         }
 
         /// <inheritdoc/>
@@ -144,10 +150,13 @@ namespace WwDevicesDotNet.Winctrl.Rmp32
             // Split the byte stream into F0 reports: the first chunk is 56 bytes,
             // the remainder (1 spilled data byte + the commit message) follows.
             var first = Math.Min(FirstChunkLength, stream.Count);
-            SendCommand(BuildReport(stream.GetRange(0, first)));
-            if (stream.Count > first)
+            lock (_StreamLock)
             {
-                SendCommand(BuildReport(stream.GetRange(first, stream.Count - first)));
+                SendCommand(BuildReport(stream.GetRange(0, first)));
+                if (stream.Count > first)
+                {
+                    SendCommand(BuildReport(stream.GetRange(first, stream.Count - first)));
+                }
             }
         }
 
